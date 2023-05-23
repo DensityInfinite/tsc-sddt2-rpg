@@ -2,4 +2,4 @@
 
 # Todo
 
-- [ ] Setup Repo
+- [x] Setup Repo
