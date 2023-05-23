@@ -3,3 +3,4 @@
 # Todo
 
 - [x] Setup Repo
+- [ ] Teach Kris Git
