@@ -47,6 +47,10 @@ In order to achieve a good result with a clean codebase, we will be splitting th
    8. Utility (Add on the way)
 
 ### Possible Problems
+| Problems | Solution |
+| -------- | -------- |
+| Time is limited | Sophisticated Planning |
+| One person might do more work | Detailed and appropriate delegation of tasks |
 
 ## Planning the Solution
 
