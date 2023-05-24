@@ -21,7 +21,11 @@ Our final goal is to create a completely playable tile-based RPG game using `pyg
 In order to achieve a good result with a clean codebase, we will be splitting the game into modules:
 
 - Main Logic (main game behaviour)
-- Characters (player and other NPC behaviour)
+- Player (player behaviour)
+  - Movement
+  - Combat
+- Enemies (enemy behaviour)
+- NPCs (NPC dialogue, etc.)
 - Items (item behaviour)
 - Map (map and tiles)
 - GUI (everything related to rendering)
@@ -29,6 +33,18 @@ In order to achieve a good result with a clean codebase, we will be splitting th
 - Utility (small useful functions)
 
 ### Steps
+
+1. Construct storyline
+2. Build basic `pygame` framework
+3. Construct Modules
+   1. Input and Events
+   2. GUI
+   3. Player Movement
+   4. Map
+   5. Enemies
+   6. Combat
+   7. Items
+   8. Utility (Add on the way)
 
 ### Possible Problems
 
