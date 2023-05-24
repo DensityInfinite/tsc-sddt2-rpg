@@ -12,9 +12,9 @@ Our final goal is to create a completely playable tile-based RPG game using `pyg
 - Combat system
 - Health system
 - Characters
-    - Player
-    - Monsters
-    - NPCs
+  - Player
+  - Monsters
+  - NPCs
 - Storyline
 - Experience and leveling system
 
