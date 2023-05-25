@@ -47,12 +47,46 @@ In order to achieve a good result with a clean codebase, we will be splitting th
    8. Utility (Add on the way)
 
 ### Possible Problems
+
 | Problems | Solution |
 | -------- | -------- |
 | Time is limited | Sophisticated Planning |
 | One person might do more work | Detailed and appropriate delegation of tasks |
 
 ## Planning the Solution
+
+### Combat System Flowchart
+
+```mermaid
+flowchart LR
+  S([Start Battle]) --> GE[(Get Enemy Stats)] --> GP[(Get Player Stats)]
+  GP --> EA{Is the enemy alive?}
+  EA --Yes--> PT{Is it the player's turn?}
+    PT --Yes--> CP{Is the player frozen?}
+      CP --Yes--> ET
+      CP --No--> PA[/Player Selects Action/]
+        PA --Attack--> CM{Missed?}
+          CM --No--> UES[Update Enemy Stats]
+            UES --> ET[End Current Turn]
+            CM --Yes--> ET
+        PA --Use Item--> SI[/Player Selects Item/]
+          SI --> AF{Affects...}
+          AF --Player--> UPS[Update Player Stats]
+            UPS --> ET
+          AF --Enemy --> UES
+          AF --None--> ET
+        PA --Escape--> CPE{Escape successful?}
+          CPE --Yes--> SE[(Save Enemy Stats)]
+          CPE --No--> ET
+    PT --No--> CE{Is the enemy frozen?}
+      CE --No--> CEM{Missed?}
+        CEM --Yes--> ET
+        CEM --No--> UPS
+      CE --Yes--> ET
+  EA --No--> SE --> SP[(Save Player Stats)]
+  ET --> FT[Flip Turn] --> EA
+  SP --> E([End Battle])
+```
 
 ## Building the Solution
 
