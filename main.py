@@ -1,5 +1,7 @@
-import pygame
+import pygame, json
 from sys import exit
+
+import resources.utils as utils
 
 
 class Game:
@@ -7,6 +9,7 @@ class Game:
         pygame.init()
         pygame.font.init()
         self.clock = pygame.time.Clock()
+        self.json_utils = utils.JsonUtils()
 
         # Screen
         self.screen = pygame.display.set_mode(
