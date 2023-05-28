@@ -44,7 +44,8 @@ In order to achieve a good result with a clean codebase, we will be splitting th
    5. Enemies
    6. Combat
    7. Items
-   8. Utility (Add on the way)
+   8. NPCs and Dialogue (If have time)
+   9. Utility (Add on the way)
 
 ### Possible Problems
 | Problems | Solution |
