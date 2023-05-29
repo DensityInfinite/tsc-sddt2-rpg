@@ -2,6 +2,7 @@ import pygame, json
 from sys import exit
 
 import resources.utils as utils
+from resources.game_settings import GameSettings
 
 
 class Game:
@@ -10,11 +11,15 @@ class Game:
         pygame.font.init()
         self.clock = pygame.time.Clock()
         self.json_utils = utils.JsonUtils()
+        self.settings = GameSettings()
 
         # Screen
         self.screen = pygame.display.set_mode(
-            (800, 600), pygame.HWSURFACE | pygame.SRCALPHA, vsync=1
+            self.settings.screen_size,
+            pygame.HWSURFACE | pygame.SRCALPHA,
+            self.settings.vsync,
         )
+        pygame.display.set_caption(self.settings.title)
 
     def run_game(self) -> None:
         while 1:
@@ -23,10 +28,10 @@ class Game:
                     pygame.quit()
                     exit()
 
-            self.screen.fill(pygame.Color(255, 255, 255))
+            self.screen.fill(self.settings.background_colour)
 
             pygame.display.update()
-            self.clock.tick(60)
+            self.clock.tick(self.settings.fps)
 
 
 if __name__ == "__main__":
