@@ -1,4 +1,4 @@
-import pygame, json
+import pygame, pygame_gui as pygui, json
 from sys import exit
 
 import resources.utils as utils
@@ -20,18 +20,24 @@ class Game:
             self.settings.vsync,
         )
         pygame.display.set_caption(self.settings.title)
+        self.manager = pygui.UIManager(self.settings.screen_size)
 
     def run_game(self) -> None:
         while 1:
+            time_delta = self.clock.tick(self.settings.fps)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
 
+                self.manager.process_events(event)
+
+            self.manager.update(time_delta)
+
             self.screen.fill(self.settings.background_colour)
+            self.manager.draw_ui(self.screen)
 
             pygame.display.update()
-            self.clock.tick(self.settings.fps)
 
 
 if __name__ == "__main__":
