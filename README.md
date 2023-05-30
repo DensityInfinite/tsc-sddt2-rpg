@@ -36,7 +36,7 @@ In order to achieve a good result with a clean codebase, we will be splitting th
 
 - [ ] Construct storyline
 - [x] Build basic `pygame` framework
-- Construct Modules
+- [ ] Construct Modules
   - [ ] Input and Events
   - [ ] GUI
   - [ ] Player Movement
