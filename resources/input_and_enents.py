@@ -1,7 +1,7 @@
 import pygame
 
 WIDTH = 800
-HEIGHT = 600
+HEIGHT = 640
 TILE_SIZE = 32
 PLAYER_SPEED = 5
 
@@ -18,16 +18,20 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-    def check_collision(self, dx, dy):
-        if dx < 0 and self.rect.left % TILE_SIZE == 0:
-            self.rect.x -= TILE_SIZE
-        elif dx > 0 and self.rect.right % TILE_SIZE == 0:
-            self.rect.x += TILE_SIZE
 
-        if dy < 0 and self.rect.top % TILE_SIZE == 0:
-            self.rect.y -= TILE_SIZE
-        elif dy > 0 and self.rect.bottom % TILE_SIZE == 0:
-            self.rect.y += TILE_SIZE
+    def snap_to_grid(self):
+        remainder_x = self.rect.x % TILE_SIZE
+        remainder_y = self.rect.y % TILE_SIZE
+
+        if remainder_x < TILE_SIZE / 2:
+            self.rect.x -= remainder_x  # Move to the left grid
+        else:
+            self.rect.x += TILE_SIZE - remainder_x  # Move to the right grid
+
+        if remainder_y < TILE_SIZE / 2:
+            self.rect.y -= remainder_y  # Move to the upper grid
+        else:
+            self.rect.y += TILE_SIZE - remainder_y  # Move to the lower grid
 
     def update(self, dx, dy):
         self.rect.x += dx
@@ -41,8 +45,6 @@ class Player(pygame.sprite.Sprite):
             self.rect.top = 0
         if self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT
-
-        self.check_collision(dx, dy)
 
 player = Player(0, 0)
 
@@ -65,6 +67,10 @@ while running:
         dy = PLAYER_SPEED
 
     player.update(dx, dy)
+
+    # If no direction key is pressed, snap the player to the grid
+    if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]):
+        player.snap_to_grid()
 
     screen.fill((0, 0, 0))
     screen.blit(player.image, player.rect)
