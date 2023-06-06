@@ -1,9 +1,10 @@
 import pygame
+import math
 
 WIDTH = 800
 HEIGHT = 640
 TILE_SIZE = 32
-PLAYER_SPEED = 5
+PLAYER_SPEED = 6
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -18,35 +19,51 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.target_x = x
+        self.target_y = y
+        self.speed = PLAYER_SPEED
 
     def snap_to_grid(self):
         remainder_x = self.rect.x % TILE_SIZE
         remainder_y = self.rect.y % TILE_SIZE
 
         if remainder_x < TILE_SIZE / 2:
-            self.rect.x -= remainder_x  # Move to the left grid
+            self.target_x = self.rect.x - remainder_x
         else:
-            self.rect.x += TILE_SIZE - remainder_x  # Move to the right grid
+            self.target_x = self.rect.x + TILE_SIZE - remainder_x
 
         if remainder_y < TILE_SIZE / 2:
-            self.rect.y -= remainder_y  # Move to the upper grid
+            self.target_y = self.rect.y - remainder_y
         else:
-            self.rect.y += TILE_SIZE - remainder_y  # Move to the lower grid
+            self.target_y = self.rect.y + TILE_SIZE - remainder_y
 
-    def update(self, dx, dy):
-        self.rect.x += dx
-        self.rect.y += dy
+    def update(self):
+        dx = self.target_x - self.rect.x
+        dy = self.target_y - self.rect.y
+
+        distance = (dx ** 2 + dy ** 2) ** 0.5
+        if distance < self.speed:
+            self.rect.x = self.target_x
+            self.rect.y = self.target_y
+        else:
+            theta = math.atan2(dy, dx)
+            self.rect.x += round(self.speed * math.cos(theta))
+            self.rect.y += round(self.speed * math.sin(theta))
 
         if self.rect.left < 0:
             self.rect.left = 0
+            self.target_x = self.rect.x
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
+            self.target_x = self.rect.x
         if self.rect.top < 0:
             self.rect.top = 0
+            self.target_y = self.rect.y
         if self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT
+            self.target_y = self.rect.y
 
-player = Player(0, 0)
+player = Player(0,0)
 
 running = True
 while running:
@@ -55,22 +72,24 @@ while running:
             running = False
 
     keys = pygame.key.get_pressed()
-    dx = 0
-    dy = 0
-    if keys[pygame.K_LEFT]:
-        dx = -PLAYER_SPEED
-    elif keys[pygame.K_RIGHT]:
-        dx = PLAYER_SPEED
-    elif keys[pygame.K_UP]:
-        dy = -PLAYER_SPEED
-    elif keys[pygame.K_DOWN]:
-        dy = PLAYER_SPEED
 
-    player.update(dx, dy)
+    if player.rect.x == player.target_x and player.rect.y == player.target_y:
+        dx = 0
+        dy = 0
+        if keys[pygame.K_LEFT]:
+            dx = -TILE_SIZE
+        elif keys[pygame.K_RIGHT]:
+            dx = TILE_SIZE
+        elif keys[pygame.K_UP]:
+            dy = -TILE_SIZE
+        elif keys[pygame.K_DOWN]:
+            dy = TILE_SIZE
 
-    # If no direction key is pressed, snap the player to the grid
-    if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]):
-        player.snap_to_grid()
+        if dx != 0 or dy != 0:
+            player.target_x = player.rect.x + dx
+            player.target_y = player.rect.y + dy
+
+    player.update()
 
     screen.fill((0, 0, 0))
     screen.blit(player.image, player.rect)
