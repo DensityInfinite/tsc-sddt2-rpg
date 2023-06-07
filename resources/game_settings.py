@@ -11,15 +11,15 @@ class Screen:
 
 class GUI:
     def __init__(self) -> None:
-        self.rounded_corner_radius = 5
-        self.inner_corner_decrement = 2
+        self.rounded_corner_radius = 2
+        self.inner_corner_decrement = 1
 
 
 class Fonts:
     def __init__(self) -> None:
-        self.button_font_name = "optima bold"
+        self.button_font_name = "baskerville"
         self.button_font = pygame.Font(
-            pygame.font.match_font(self.button_font_name), 25
+            pygame.font.match_font(self.button_font_name, bold=True), 18
         )
 
 
@@ -34,8 +34,13 @@ class Colours:
         self.button_text_colour = self.white
 
 
+class Cursor:
+    def __init__(self) -> None:
+        self.cursor_sprite_size = 1
+        self.cursor_sprite_as_cursor = False
+        self.cursor_offset = (-1, -1)
+
+
 class Dev:
     def __init__(self) -> None:
         self.button_pressed_event = pygame.USEREVENT + 1
-        self.cursor_sprite_size = 5
-        self.cursor_sprite_as_cursor = False

@@ -14,7 +14,7 @@ class Game:
         self.json_utils = utils.JsonUtils()
         self.screen_settings = game_settings.Screen()
         self.colours = game_settings.Colours()
-        self.dev_tools = game_settings.Dev()
+        self.cursor_settings = game_settings.Cursor()
         self.gui = gui
 
         # Screen
@@ -28,16 +28,16 @@ class Game:
         pygame.display.set_caption(self.screen_settings.title)
 
         # Cursor
-        pygame.mouse.set_visible(not self.dev_tools.cursor_sprite_as_cursor)
+        pygame.mouse.set_visible(not self.cursor_settings.cursor_sprite_as_cursor)
         self.cursor = pygame.sprite.GroupSingle()
         self.cursor.add(gui.Cursor())
 
     def run_game(self) -> None:
         gui_group = pygame.sprite.RenderUpdates()
         hello_button = self.gui.Button(
-            pygame.Rect(self.screen_centre_pos, (300, 50)),
-            "Hello!",
-            self.colours.background_colour,
+            pygame.Rect(self.screen_centre_pos, (100, 50)),
+            "Play",
+            self.colours.white,
         )
         gui_group.add(hello_button)
         while 1:
@@ -55,6 +55,8 @@ class Game:
 
             self.screen.fill(self.colours.background_colour)
             gui_group.draw(self.screen)
+            if self.cursor_settings.cursor_sprite_as_cursor:
+                self.cursor.draw(self.screen)
 
             pygame.display.update()
 

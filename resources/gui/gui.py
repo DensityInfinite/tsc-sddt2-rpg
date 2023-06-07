@@ -29,16 +29,16 @@ class Button(pygame.sprite.Sprite):
         self.event_posted = False
 
         # Image
-        self.text_image = self.fonts.button_font.render(
-            text, True, self.colours.button_text_colour
-        )
         self.coloured_text_image = self.fonts.button_font.render(
             text, True, self.colour
+        )
+        self.invisible_text_image = self.fonts.button_font.render(
+            text, True, self.colours.background_colour
         )
         self.white_text_image = self.fonts.button_font.render(
             text, True, self.colours.white
         )
-        self.text_rect = self.text_image.get_rect()
+        self.text_rect = self.invisible_text_image.get_rect()
         self.text_rect.center = (
             self.dimensions.width // 2,
             self.dimensions.height // 2,
@@ -48,19 +48,19 @@ class Button(pygame.sprite.Sprite):
         )
         pygame.draw.rect(
             self.image,
-            self.colour,
+            self.colours.white,
             pygame.Rect(0, 0, self.dimensions.width, self.dimensions.height),
             width=2,
             border_radius=self.gui_consts.rounded_corner_radius,
         )
         pygame.draw.rect(
             self.image,
-            self.colour,
+            self.colours.white,
             pygame.Rect(2, 2, self.dimensions.width - 4, self.dimensions.height - 4),
             border_radius=self.gui_consts.rounded_corner_radius
             - self.gui_consts.inner_corner_decrement,
         )
-        self.image.blit(self.text_image, self.text_rect)
+        self.image.blit(self.invisible_text_image, self.text_rect)
         self.image.set_colorkey(self.colours.background_colour)
         self.rect = self.image.get_rect()
         self.rect.center = self.dimensions.topleft
@@ -69,7 +69,24 @@ class Button(pygame.sprite.Sprite):
         if self.state == "pressed":
             pygame.draw.rect(
                 self.image,
-                self.colour,
+                self.colours.background_colour,
+                pygame.Rect(0, 0, self.dimensions.width, self.dimensions.height),
+                width=2,
+                border_radius=self.gui_consts.rounded_corner_radius,
+            )
+            pygame.draw.rect(
+                self.image,
+                self.colours.background_colour,
+                pygame.Rect(
+                    2, 2, self.dimensions.width - 4, self.dimensions.height - 4
+                ),
+                border_radius=self.gui_consts.rounded_corner_radius
+                - self.gui_consts.inner_corner_decrement,
+            )
+        elif self.state == "hovered":
+            pygame.draw.rect(
+                self.image,
+                self.colours.background_colour,
                 pygame.Rect(0, 0, self.dimensions.width, self.dimensions.height),
                 width=2,
                 border_radius=self.gui_consts.rounded_corner_radius,
@@ -84,7 +101,7 @@ class Button(pygame.sprite.Sprite):
                 - self.gui_consts.inner_corner_decrement,
             )
             self.image.blit(self.coloured_text_image, self.text_rect)
-        elif self.state == "hovered":
+        else:
             pygame.draw.rect(
                 self.image,
                 self.colours.white,
@@ -94,32 +111,14 @@ class Button(pygame.sprite.Sprite):
             )
             pygame.draw.rect(
                 self.image,
-                self.colour,
+                self.colours.white,
                 pygame.Rect(
                     2, 2, self.dimensions.width - 4, self.dimensions.height - 4
                 ),
                 border_radius=self.gui_consts.rounded_corner_radius
                 - self.gui_consts.inner_corner_decrement,
             )
-            self.image.blit(self.text_image, self.text_rect)
-        else:
-            pygame.draw.rect(
-                self.image,
-                self.colour,
-                pygame.Rect(0, 0, self.dimensions.width, self.dimensions.height),
-                width=2,
-                border_radius=self.gui_consts.rounded_corner_radius,
-            )
-            pygame.draw.rect(
-                self.image,
-                self.colour,
-                pygame.Rect(
-                    2, 2, self.dimensions.width - 4, self.dimensions.height - 4
-                ),
-                border_radius=self.gui_consts.rounded_corner_radius
-                - self.gui_consts.inner_corner_decrement,
-            )
-            self.image.blit(self.text_image, self.text_rect)
+            self.image.blit(self.invisible_text_image, self.text_rect)
 
         self.last_state = self.state
         if pygame.sprite.spritecollide(self, cursor, False) and self.clickable:
@@ -168,7 +167,7 @@ class Cursor(pygame.sprite.Sprite):
         # Initialise
         pygame.sprite.Sprite.__init__(self)
         self.colours = game_settings.Colours()
-        self.dev_tools = game_settings.Dev()
+        self.cursor_settings = game_settings.Cursor()
 
         # Button
         self.button_state: bool = False
@@ -177,7 +176,10 @@ class Cursor(pygame.sprite.Sprite):
         self.x = 0
         self.y = 0
         self.image = pygame.Surface(
-            (self.dev_tools.cursor_sprite_size, self.dev_tools.cursor_sprite_size),
+            (
+                self.cursor_settings.cursor_sprite_size,
+                self.cursor_settings.cursor_sprite_size,
+            ),
             pygame.SRCALPHA,
         )
         pygame.draw.ellipse(
@@ -190,8 +192,8 @@ class Cursor(pygame.sprite.Sprite):
         self.rect.center = (self.x, self.y)
 
     def update(self, mouse_pos: tuple[int, int]) -> None:
-        self.x = mouse_pos[0]
-        self.y = mouse_pos[1]
+        self.x = mouse_pos[0] + self.cursor_settings.cursor_offset[0]
+        self.y = mouse_pos[1] + self.cursor_settings.cursor_offset[1]
         self.rect.center = (self.x, self.y)
 
     def register_click(self, pressed: bool) -> None:
