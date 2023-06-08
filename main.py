@@ -34,12 +34,6 @@ class Game:
 
     def run_game(self) -> None:
         gui_group = pygame.sprite.RenderUpdates()
-        hello_button = self.gui.Button(
-            pygame.Rect(self.screen_centre_pos, (100, 50)),
-            "Play",
-            self.colours.white,
-        )
-        gui_group.add(hello_button)
         while 1:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
