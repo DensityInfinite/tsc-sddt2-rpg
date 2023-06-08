@@ -38,7 +38,7 @@ In order to achieve a good result with a clean codebase, we will be splitting th
 - [x] Build basic `pygame` framework
 - [ ] Construct Modules
   - [ ] Input and Events
-  - [ ] GUI
+  - [x] GUI (For now - more elements to be added later)
   - [ ] Player Movement
   - [ ] Map
   - [ ] Enemies
