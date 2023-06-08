@@ -17,9 +17,9 @@ class GUI:
 
 class Fonts:
     def __init__(self) -> None:
-        self.button_font_name = "baskerville"
+        self.button_font_name = "cochin"
         self.button_font = pygame.Font(
-            pygame.font.match_font(self.button_font_name, bold=True), 18
+            pygame.font.match_font(self.button_font_name, bold=True), 19
         )
 
 
