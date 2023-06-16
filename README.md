@@ -38,7 +38,7 @@ In order to achieve a good result with a clean codebase, we will be splitting th
 - [x] Build basic `pygame` framework
 - [ ] Construct Modules
   - [ ] Input and Events
-  - [ ] GUI
+  - [x] GUI elements (For now - more elements to be added later)
   - [ ] Player Movement
   - [ ] Map
   - [ ] Enemies
@@ -46,6 +46,13 @@ In order to achieve a good result with a clean codebase, we will be splitting th
   - [ ] Items
   - [ ] NPCs and Dialogue (If have time)
   - [ ] Utility (Add on the way)
+- [ ] Assemble
+  - [ ] Lighting system
+  - [ ] Actual Maps
+    - [ ] Enemies and combat triggers
+    - [ ] NPCs (If made)
+  - [ ] Menus
+  - [ ] Game Progress (Tutorial, boss etc.)
 
 ### Possible Problems
 
