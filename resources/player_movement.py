@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.image.fill((255, 0, 0))
-        self.rect = self.image.get_rect()
+        self.rect: pygame.Rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.target_x = x
@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite):
         dx = self.target_x - self.rect.x
         dy = self.target_y - self.rect.y
 
-        distance = (dx ** 2 + dy ** 2) ** 0.5
+        distance = (dx**2 + dy**2) ** 0.5
         if distance < self.speed:
             self.rect.x = self.target_x
             self.rect.y = self.target_y
@@ -63,7 +63,8 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = HEIGHT
             self.target_y = self.rect.y
 
-player = Player(0,0)
+
+player = Player(0, 0)
 
 running = True
 while running:
