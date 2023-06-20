@@ -3,7 +3,7 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, game):
+    def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((game.tile_size, game.tile_size))
         self.image.fill((255, 0, 0))
@@ -54,3 +54,15 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom > self.game.height:
             self.rect.bottom = self.game.height
             self.target_y = self.rect.y
+
+    def move_right(self):
+        pass
+
+    def move_left(self):
+        pass
+
+    def move_up(self):
+        pass
+
+    def move_down(self):
+        pass
