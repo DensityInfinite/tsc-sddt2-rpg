@@ -3,31 +3,33 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, width, height, tile_size, player_speed):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((game.tile_size, game.tile_size))
+        self.image = pygame.Surface((tile_size, tile_size))
         self.image.fill((255, 0, 0))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.target_x = x
         self.target_y = y
-        self.speed = game.player_speed
-        self.game = game
+        self.speed = player_speed
+        self.width = width
+        self.height = height
+        self.tile_size = tile_size
 
     def snap_to_grid(self):
-        remainder_x = self.rect.x % self.game.tile_size
-        remainder_y = self.rect.y % self.game.tile_size
+        remainder_x = self.rect.x % self.tile_size
+        remainder_y = self.rect.y % self.tile_size
 
-        if remainder_x < self.game.tile_size / 2:
+        if remainder_x < self.tile_size / 2:
             self.target_x = self.rect.x - remainder_x
         else:
-            self.target_x = self.rect.x + self.game.tile_size - remainder_x
+            self.target_x = self.rect.x + self.tile_size - remainder_x
 
-        if remainder_y < self.game.tile_size / 2:
+        if remainder_y < self.tile_size / 2:
             self.target_y = self.rect.y - remainder_y
         else:
-            self.target_y = self.rect.y + self.game.tile_size - remainder_y
+            self.target_y = self.rect.y + self.tile_size - remainder_y
 
     def update(self):
         error_x = self.target_x - self.rect.x
@@ -45,24 +47,28 @@ class Player(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
             self.target_x = self.rect.x
-        if self.rect.right > self.game.width:
-            self.rect.right = self.game.width
+        if self.rect.right > self.width:
+            self.rect.right = self.width
             self.target_x = self.rect.x
         if self.rect.top < 0:
             self.rect.top = 0
             self.target_y = self.rect.y
-        if self.rect.bottom > self.game.height:
-            self.rect.bottom = self.game.height
+        if self.rect.bottom > self.height:
+            self.rect.bottom = self.height
             self.target_y = self.rect.y
 
     def move_right(self):
-        pass
+        if self.rect.x + self.tile_size < self.width:
+            self.target_x += self.tile_size
 
     def move_left(self):
-        pass
+        if self.rect.x - self.tile_size >= 0:
+            self.target_x -= self.tile_size
 
     def move_up(self):
-        pass
+        if self.rect.y - self.tile_size >= 0:
+            self.target_y -= self.tile_size
 
     def move_down(self):
-        pass
+        if self.rect.y + self.tile_size < self.height:
+            self.target_y += self.tile_size
