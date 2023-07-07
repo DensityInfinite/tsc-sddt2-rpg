@@ -4,7 +4,7 @@ import pygame, os.path as path
 class Screen:
     def __init__(self) -> None:
         self.title = "DensityInfinite & Peilin - Tile-Based RPG"
-        self.screen_size = (800, 600)
+        self.screen_size = (1000, 800)
         self.vsync = 1
         self.fps = 60
 
