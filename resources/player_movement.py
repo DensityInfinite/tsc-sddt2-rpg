@@ -3,8 +3,11 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height, tile_size, player_speed):
-        pygame.sprite.Sprite.__init__(self)
+    def __init__(
+        self, x: int, y: int, width: int, height: int, tile_size: int, player_speed: int
+    ):
+        """Initialise the Player object."""
+        super().__init__()
         self.image = pygame.Surface((tile_size, tile_size))
         self.image.fill((255, 0, 0))
         self.rect = self.image.get_rect()
@@ -16,7 +19,8 @@ class Player(pygame.sprite.Sprite):
         self.height = height
         self.tile_size = tile_size
 
-    def snap_to_grid(self):
+    def snap_to_grid(self) -> None:
+        """Adjust player's position to align with the grid."""
         remainder_x = self.rect.x % self.tile_size
         remainder_y = self.rect.y % self.tile_size
 
@@ -30,7 +34,8 @@ class Player(pygame.sprite.Sprite):
         else:
             self.target_y = self.rect.y + self.tile_size - remainder_y
 
-    def update(self):
+    def update(self) -> None:
+        """Update player's position based on the target position."""
         error_x = self.target_x - self.rect.x
         error_y = self.target_y - self.rect.y
 
@@ -56,14 +61,18 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = self.height
             self.target_y = self.rect.y
 
-    def move_right(self):
+    def move_right(self) -> None:
+        """Move the player right."""
         self.rect.x += self.speed
 
-    def move_left(self):
+    def move_left(self) -> None:
+        """Move the player left."""
         self.rect.x -= self.speed
 
-    def move_up(self):
+    def move_up(self) -> None:
+        """Move the player up."""
         self.rect.y -= self.speed
 
-    def move_down(self):
+    def move_down(self) -> None:
+        """Move the player down."""
         self.rect.y += self.speed
