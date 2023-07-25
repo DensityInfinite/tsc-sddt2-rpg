@@ -67,22 +67,18 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = self.screen_height
             self.target_y = self.rect.y
 
+    def move_right(self) -> None:
+        # Move the player right.
+        self.target_x += self.speed
 
-def move_right(self) -> None:
-    # Move the player right.
-    self.target_x += self.speed
+    def move_left(self) -> None:
+        # Move the player left.
+        self.target_x -= self.speed
 
+    def move_up(self) -> None:
+        # Move the player up.
+        self.target_y -= self.speed
 
-def move_left(self) -> None:
-    # Move the player left.
-    self.target_x -= self.speed
-
-
-def move_up(self) -> None:
-    # Move the player up.
-    self.target_y -= self.speed
-
-
-def move_down(self) -> None:
-    # Move the player down.
-    self.target_y += self.speed
+    def move_down(self) -> None:
+        # Move the player down.
+        self.target_y += self.speed
