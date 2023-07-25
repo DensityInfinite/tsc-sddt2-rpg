@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.Surface((tile_size, tile_size))
         self.image.fill((255, 0, 0))
-        self.rect = self.image.get_rect()
+        self.rect: pygame.rect.Rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.target_x = x
         self.target_y = y
