@@ -30,4 +30,4 @@ class GridSettings:
 class TileSettings:
     def __init__(self) -> None:
         # Tile
-        self.size = 32
+        self.size = 100
