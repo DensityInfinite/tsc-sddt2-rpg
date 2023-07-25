@@ -8,6 +8,9 @@ class Screen:
         self.vsync = 1
         self.fps = 60
 
+class Map:
+    def __init__(self) -> None:
+        self.tile_size = 100
 
 class GUI:
     def __init__(self) -> None:
