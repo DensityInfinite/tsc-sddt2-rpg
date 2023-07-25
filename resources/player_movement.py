@@ -4,9 +4,15 @@ import math
 
 class Player(pygame.sprite.Sprite):
     def __init__(
-        self, x: int, y: int, width: int, height: int, tile_size: int, player_speed: int
+        self,
+        x: int,
+        y: int,
+        screen_width: int,
+        screen_height: int,
+        tile_size: int,
+        player_speed: int,
     ):
-        """Initialise the Player object."""
+        # Initialise the Player object.
         super().__init__()
         self.image = pygame.Surface((tile_size, tile_size))
         self.image.fill((255, 0, 0))
@@ -15,12 +21,12 @@ class Player(pygame.sprite.Sprite):
         self.target_x = x
         self.target_y = y
         self.speed = player_speed
-        self.width = width
-        self.height = height
+        self.screen_width = screen_width
+        self.screen_height = screen_height
         self.tile_size = tile_size
 
     def snap_to_grid(self) -> None:
-        """Adjust player's position to align with the grid."""
+        # Adjust player's position to align with the grid.
         remainder_x = self.rect.x % self.tile_size
         remainder_y = self.rect.y % self.tile_size
 
@@ -35,7 +41,7 @@ class Player(pygame.sprite.Sprite):
             self.target_y = self.rect.y + self.tile_size - remainder_y
 
     def update(self) -> None:
-        """Update player's position based on the target position."""
+        # Update player's position based on the target position.
         error_x = self.target_x - self.rect.x
         error_y = self.target_y - self.rect.y
 
@@ -51,28 +57,28 @@ class Player(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
             self.target_x = self.rect.x
-        if self.rect.right > self.width:
-            self.rect.right = self.width
+        if self.rect.right > self.screen_width:
+            self.rect.right = self.screen_width
             self.target_x = self.rect.x
         if self.rect.top < 0:
             self.rect.top = 0
             self.target_y = self.rect.y
-        if self.rect.bottom > self.height:
-            self.rect.bottom = self.height
+        if self.rect.bottom > self.screen_height:
+            self.rect.bottom = self.screen_height
             self.target_y = self.rect.y
 
     def move_right(self) -> None:
-        """Move the player right."""
+        # Move the player right.
         self.rect.x += self.speed
 
     def move_left(self) -> None:
-        """Move the player left."""
+        # Move the player left.
         self.rect.x -= self.speed
 
     def move_up(self) -> None:
-        """Move the player up."""
+        # Move the player up.
         self.rect.y -= self.speed
 
     def move_down(self) -> None:
-        """Move the player down."""
+        # Move the player down.
         self.rect.y += self.speed

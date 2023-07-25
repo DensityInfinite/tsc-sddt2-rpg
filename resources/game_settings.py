@@ -12,6 +12,7 @@ class GameSettings:
         # Colours
         self.background_colour = pygame.Color(255, 255, 255)
 
+
 class PlayerSettings:
     def __init__(self) -> None:
         # Player
