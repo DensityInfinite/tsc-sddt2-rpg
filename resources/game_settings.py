@@ -12,6 +12,12 @@ class Map:
     def __init__(self) -> None:
         self.tile_size = 100
 
+class Enemy:
+    def __init__(self) -> None:
+        self.chase_time = 5
+        self.time_increment = 2
+        self.time_increment_dis = 50
+
 class GUI:
     def __init__(self) -> None:
         self.rounded_corner_radius = 2
