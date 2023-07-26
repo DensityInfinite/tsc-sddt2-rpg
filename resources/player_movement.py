@@ -82,3 +82,8 @@ class Player(pygame.sprite.Sprite):
     def move_down(self) -> None:
         # Move the player down.
         self.target_y += self.speed
+
+    def _move_stop(self) -> None:
+        # Stop the player from moving.
+        self.target_x = self.rect.x
+        self.target_y = self.rect.y
