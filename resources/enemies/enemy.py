@@ -36,21 +36,21 @@ class Enemy(pygame.sprite.Sprite):
         if self.state == "alone":
             self.state = self._reshuffle_state()
         else:
-            target_y, target_x = self._get_target(self.state, player_raw_pos)
-            error_y = target_y - self.rect.centery
+            target_x, target_y = self._get_target(self.state, player_raw_pos)
             error_x = target_x - self.rect.centerx
+            error_y = target_y - self.rect.centery
 
             match self.state:
                 case "moving":
-                    if error_y == 0 and error_x == 0:
+                    if error_x == 0 and error_y == 0:
                         self.state = "returning"
                 case "returning":
-                    if error_y == 0 and error_x == 0:
+                    if error_x == 0 and error_y == 0:
                         self.state = "alone"
                 case "chasing":
                     self.chase_time -= 1
                     if (
-                        abs(math.hypot(error_y, error_x))
+                        abs(math.hypot(error_x, error_y))
                         < self.enemy_settings.time_increment_dis
                     ):
                         self.chase_time += self.enemy_settings.time_increment
@@ -58,8 +58,10 @@ class Enemy(pygame.sprite.Sprite):
                         self.state = "alone"
                         self.chase_time = self.enemy_settings.chase_time
 
-            self.rect.centery += (error_y // error_y) * min(self.raw_speed, error_y)
-            self.rect.centerx += (error_x // error_x) * min(self.raw_speed, error_x)
+            if error_x != 0:
+                self.rect.centerx += int(math.copysign(1, error_x) * min(self.raw_speed, abs(error_x)))
+            if error_y != 0:
+                self.rect.centery += int(math.copysign(1, error_y) * min(self.raw_speed, abs(error_y)))
 
     def _reshuffle_state(self) -> str:
         new_state = randint(1, 100)
@@ -74,15 +76,15 @@ class Enemy(pygame.sprite.Sprite):
     def _get_target(
         self, state: str, player_raw_pos: tuple[int, int]
     ) -> tuple[int, int]:
-        target_y, target_x = self.rect.center
+        target_x, target_y = self.rect.center
         match state:
             case "moving":
-                target_y = self.movement[0]
-                target_x = self.movement[1]
+                target_x = self.movement[0]
+                target_y = self.movement[1]
             case "returning":
-                target_y = self.raw_pos[0]
                 target_x = self.raw_pos[1]
+                target_y = self.raw_pos[0]
             case "chasing":
-                target_y = player_raw_pos[0]
-                target_x = player_raw_pos[1]
-        return (target_y, target_x)
+                target_x = player_raw_pos[0]
+                target_y = player_raw_pos[1]
+        return (target_x, target_y)
