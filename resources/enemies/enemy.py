@@ -1,13 +1,12 @@
-import pygame, math
-from random import randint
+import pygame
+import math
+import random
 import resources.game_settings as settings
-
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(
-        self, in_game_pos: tuple[int, int], movement: tuple[int, int], raw_speed: int
+        self, in_game_pos, movement, raw_speed
     ) -> None:
-        """raw_speed: the speed of the enemy in pixels"""
         # Initialise
         pygame.sprite.Sprite.__init__(self)
         self.colours = settings.Colours()
@@ -16,7 +15,6 @@ class Enemy(pygame.sprite.Sprite):
         self.enemy_settings = settings.Enemy()
 
         self.state = "alone"
-
         self.raw_speed = raw_speed
         self.movement = movement
         self.chase_time = self.enemy_settings.chase_time * self.screen_settings.fps
@@ -35,22 +33,18 @@ class Enemy(pygame.sprite.Sprite):
         self.rect: pygame.rect.Rect = self.image.get_rect()
         self.rect.center = self.raw_pos
 
-    def update(self, player_raw_pos: tuple[int, int]):
-        error_x = 0
-        error_y = 0
+    def update(self, player_raw_pos):
+        target_x, target_y = self._get_target(self.state, player_raw_pos)
+        error_x = target_x - self.rect.centerx
+        error_y = target_y - self.rect.centery
         if self.state == "alone":
+            # Reshuffle after a break of random length
             if self.tick_counter <= 0:
-                self.tick_counter = randint(0, 300)
+                self.tick_counter = random.randint(0, 300)
                 self.state = self._reshuffle_state()
             self.tick_counter -= 1
-            target_x, target_y = self._get_target(self.state, player_raw_pos)
-            error_x = target_x - self.rect.centerx
-            error_y = target_y - self.rect.centery
         else:
-            target_x, target_y = self._get_target(self.state, player_raw_pos)
-            error_x = target_x - self.rect.centerx
-            error_y = target_y - self.rect.centery
-
+            # Update states
             match self.state:
                 case "moving":
                     if error_x == 0 and error_y == 0:
@@ -71,6 +65,7 @@ class Enemy(pygame.sprite.Sprite):
                             self.enemy_settings.chase_time * self.screen_settings.fps
                         )
 
+        # Move the enemy
         if abs(error_x) != 0:
             self.rect.centerx += int(
                 math.copysign(1, error_x) * min(self.raw_speed, abs(error_x))
@@ -80,13 +75,9 @@ class Enemy(pygame.sprite.Sprite):
                 math.copysign(1, error_y) * min(self.raw_speed, abs(error_y))
             )
 
-    def _reshuffle_state(self) -> str:
-        new_state = randint(1, 100)
-        if new_state <= 75:
-            return "moving"
-        elif new_state <= 100:
-            return "chasing"
-        return ""
+    def _reshuffle_state(self):
+        states = ["moving"] * 75 + ["chasing"] * 25
+        return random.choice(states)
 
     def _get_target(
         self, state: str, player_raw_pos: tuple[int, int]
