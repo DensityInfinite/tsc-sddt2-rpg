@@ -41,7 +41,7 @@ In order to achieve a good result with a clean codebase, we will be splitting th
   - [x] GUI elements (For now - more elements to be added later)
   - [ ] Player Movement
   - [ ] Map
-  - [ ] Enemies
+  - [x] Enemies
   - [ ] Combat
   - [ ] Items
   - [ ] NPCs and Dialogue (If have time)
