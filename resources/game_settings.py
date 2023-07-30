@@ -10,7 +10,7 @@ class Screen:
 
 class Map:
     def __init__(self) -> None:
-        self.tile_size = 100
+        self.tile_size = 50
 
 class Enemy:
     def __init__(self) -> None:
