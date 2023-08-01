@@ -25,6 +25,8 @@ class Player(pygame.sprite.Sprite):
         self.screen_height = screen_height
         self.tile_size = tile_size
 
+        self.dx = 0
+        self.dy = 0
         self.moving_right = False
         self.moving_left = False
         self.moving_up = False
@@ -78,26 +80,33 @@ class Player(pygame.sprite.Sprite):
 
     def set_moving_right(self, condition: bool) -> None:
         self.moving_right = condition
+        self.dx = self.tile_size // 3
 
     def set_moving_left(self, condition: bool) -> None:
         self.moving_left = condition
+        self.dx = -self.tile_size // 3
 
     def set_moving_up(self, condition: bool) -> None:
         self.moving_up = condition
+        self.dy = -self.tile_size // 3
 
     def set_moving_down(self, condition: bool) -> None:
         self.moving_down = condition
+        self.dy = self.tile_size // 3
 
     def _move_stop(self) -> None:
         # Stop the player from moving.
-        self.target_x = self.rect.x
-        self.target_y = self.rect.y
+        # self.target_x = self.rect.x
+        # self.target_y = self.rect.y
         self._snap_to_grid_x()
         self._snap_to_grid_y()
 
     def _snap_to_grid_x(self) -> None:
         """Adjust player's x position to align with the grid."""
         remainder_x = self.rect.x % self.tile_size
+        if not self.moving_right and not self.moving_left:
+            self.rect.x += self.dx
+            self.dx = 0
 
         if remainder_x < self.tile_size / 2:
             self.target_x = self.rect.x - remainder_x
@@ -107,6 +116,9 @@ class Player(pygame.sprite.Sprite):
     def _snap_to_grid_y(self) -> None:
         """Adjust player's y position to align with the grid."""
         remainder_y = self.rect.y % self.tile_size
+        if not self.moving_up and not self.moving_down:
+            self.rect.y += self.dy
+            self.dy = 0
 
         if remainder_y < self.tile_size / 2:
             self.target_y = self.rect.y - remainder_y
