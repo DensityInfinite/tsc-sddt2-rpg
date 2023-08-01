@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         player_speed: int,
     ):
         # Initialise the Player object.
-        super().__init__()
+        pygame.sprite.Sprite().__init__()
         self.image = pygame.Surface((tile_size, tile_size))
         self.image.fill((255, 0, 0))
         self.rect: pygame.rect.Rect = self.image.get_rect()
