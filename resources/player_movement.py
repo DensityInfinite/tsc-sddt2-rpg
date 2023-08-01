@@ -25,22 +25,31 @@ class Player(pygame.sprite.Sprite):
         self.screen_height = screen_height
         self.tile_size = tile_size
 
-    def snap_to_grid(self) -> None:
-        # Adjust player's position to align with the grid.
-        remainder_x = self.rect.x % self.tile_size
-        remainder_y = self.rect.y % self.tile_size
-
-        if remainder_x < self.tile_size / 2:
-            self.target_x = self.rect.x - remainder_x
-        else:
-            self.target_x = self.rect.x + self.tile_size - remainder_x
-
-        if remainder_y < self.tile_size / 2:
-            self.target_y = self.rect.y - remainder_y
-        else:
-            self.target_y = self.rect.y + self.tile_size - remainder_y
+        self.moving_right = False
+        self.moving_left = False
+        self.moving_up = False
+        self.moving_down = False
 
     def update(self) -> None:
+        if self.moving_right:
+            self.target_x += self.speed
+        elif self.moving_left:
+            self.target_x -= self.speed
+        else:
+            self._snap_to_grid_x()
+        if self.moving_down:
+            self.target_y += self.speed
+        elif self.moving_up:
+            self.target_y -= self.speed
+        else:
+            self._snap_to_grid_y()
+        if (
+            not self.moving_right
+            and not self.moving_left
+            and not self.moving_up
+            and not self.moving_down
+        ):
+            self._move_stop()
         # Update player's position based on the target position.
         error_x = self.target_x - self.rect.x
         error_y = self.target_y - self.rect.y
@@ -67,23 +76,39 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = self.screen_height
             self.target_y = self.rect.y
 
-    def move_right(self) -> None:
-        # Move the player right.
-        self.target_x += self.speed
+    def set_moving_right(self, condition: bool) -> None:
+        self.moving_right = condition
 
-    def move_left(self) -> None:
-        # Move the player left.
-        self.target_x -= self.speed
+    def set_moving_left(self, condition: bool) -> None:
+        self.moving_left = condition
 
-    def move_up(self) -> None:
-        # Move the player up.
-        self.target_y -= self.speed
+    def set_moving_up(self, condition: bool) -> None:
+        self.moving_up = condition
 
-    def move_down(self) -> None:
-        # Move the player down.
-        self.target_y += self.speed
+    def set_moving_down(self, condition: bool) -> None:
+        self.moving_down = condition
 
     def _move_stop(self) -> None:
         # Stop the player from moving.
         self.target_x = self.rect.x
         self.target_y = self.rect.y
+        self._snap_to_grid_x()
+        self._snap_to_grid_y()
+
+    def _snap_to_grid_x(self) -> None:
+        """Adjust player's x position to align with the grid."""
+        remainder_x = self.rect.x % self.tile_size
+
+        if remainder_x < self.tile_size / 2:
+            self.target_x = self.rect.x - remainder_x
+        else:
+            self.target_x = self.rect.x + self.tile_size - remainder_x
+
+    def _snap_to_grid_y(self) -> None:
+        """Adjust player's y position to align with the grid."""
+        remainder_y = self.rect.y % self.tile_size
+
+        if remainder_y < self.tile_size / 2:
+            self.target_y = self.rect.y - remainder_y
+        else:
+            self.target_y = self.rect.y + self.tile_size - remainder_y
