@@ -40,7 +40,8 @@ class Map:
         for row in tiles:
             cursor = (0, 0)
             for tile in row:
-                grid.blit(textures[tile], cursor)
+                if tile is not int:
+                    grid.blit(textures[tile], cursor)
                 cursor = (cursor[0] + self.map_settings.tile_size, cursor[1])
             cursor = (0, cursor[1 + self.map_settings.tile_size])
 
