@@ -1,5 +1,6 @@
 import pygame
 import math
+import resources.game_settings as game_settings
 
 
 class Player(pygame.sprite.Sprite):
@@ -7,23 +8,19 @@ class Player(pygame.sprite.Sprite):
         self,
         x: int,
         y: int,
-        screen_width: int,
-        screen_height: int,
-        tile_size: int,
-        player_speed: int,
     ):
         # Initialise the Player object.
         pygame.sprite.Sprite().__init__()
-        self.image = pygame.Surface((tile_size, tile_size))
-        self.image.fill((255, 0, 0))
-        self.rect: pygame.rect.Rect = self.image.get_rect()
-        self.rect.center = (x, y)
         self.target_x = x
         self.target_y = y
-        self.speed = player_speed
-        self.screen_width = screen_width
-        self.screen_height = screen_height
-        self.tile_size = tile_size
+
+        self.player_settings = game_settings.Player()
+        self.screen_settings = game_settings.Screen()
+        self.map_settings = game_settings.Map()
+        self.speed = self.player_settings.speed
+        self.screen_width = self.screen_settings.screen_size[0]
+        self.screen_height = self.screen_settings.screen_size[1]
+        self.tile_size = self.map_settings.tile_size
 
         self.dx = 0
         self.dy = 0
@@ -31,6 +28,11 @@ class Player(pygame.sprite.Sprite):
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
+
+        self.image = pygame.Surface((self.tile_size, self.tile_size))
+        self.image.fill((255, 0, 0))
+        self.rect: pygame.rect.Rect = self.image.get_rect()
+        self.rect.center = (x, y)
 
     def update(self) -> None:
         if self.moving_right:
