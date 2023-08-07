@@ -8,6 +8,15 @@ class Screen:
         self.vsync = 1
         self.fps = 60
 
+class Map:
+    def __init__(self) -> None:
+        self.tile_size = 50
+
+class Enemy:
+    def __init__(self) -> None:
+        self.chase_time = 5
+        self.time_increment = 2
+        self.time_increment_dis = 50
 
 class GUI:
     def __init__(self) -> None:
@@ -27,6 +36,7 @@ class Colours:
     def __init__(self) -> None:
         self.white = pygame.Color(255, 255, 255)
         self.blue = pygame.Color(70, 223, 253)
+        self.red = pygame.Color(136, 8, 8)
         self.grey = pygame.Color(50, 50, 50)
         self.black = pygame.Color(0, 0, 0)
 
