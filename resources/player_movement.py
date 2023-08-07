@@ -96,8 +96,6 @@ class Player(pygame.sprite.Sprite):
 
     def _move_stop(self) -> None:
         # Stop the player from moving.
-        # self.target_x = self.rect.x
-        # self.target_y = self.rect.y
         self._snap_to_grid_x()
         self._snap_to_grid_y()
 
