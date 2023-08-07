@@ -8,15 +8,25 @@ class Screen:
         self.vsync = 1
         self.fps = 60
 
+
+class Player:
+    def __init__(self) -> None:
+        self.speed = 6
+        self.initial_position = (0, 0)
+        self.colour = (255, 0, 0)
+
+
 class Map:
     def __init__(self) -> None:
         self.tile_size = 50
+
 
 class Enemy:
     def __init__(self) -> None:
         self.chase_time = 5
         self.time_increment = 2
         self.time_increment_dis = 50
+
 
 class GUI:
     def __init__(self) -> None:
