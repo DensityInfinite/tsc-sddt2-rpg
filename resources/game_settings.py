@@ -3,8 +3,8 @@ import pygame, os.path as path
 
 class Screen:
     def __init__(self) -> None:
-        self.title = 'DensityInfinite & Peilin - Tile-Based RPG'
-        self.screen_size = (1000, 800)
+        self.title = "DensityInfinite & Peilin - Tile-Based RPG"
+        self.screen_size = (800, 600)
         self.vsync = 1
         self.fps = 60
 
@@ -27,11 +27,14 @@ class Enemy:
         self.time_increment = 2
         self.time_increment_dis = 50
 
+
 class Map:
     def __init__(self) -> None:
         self.tile_size = 100
-        self.grids_master_path = path.join(path.dirname(__file__),'resources/map/grids/grids_master.json')
-        self.textures_path = path.join(path.dirname(__file__),'resources/textures')
+        self.grids_master_path = path.join(
+            path.dirname(__file__), "resources/map/grids/grids_master.json"
+        )
+        self.textures_path = path.join(path.dirname(__file__), "resources/textures")
 
 
 class GUI:
