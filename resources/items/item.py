@@ -42,5 +42,7 @@ class Inventory:
     def get_items(self) -> list:
         return self.items
 
-    def get_holding_item(self) -> str:
-        return self.selected_item
+    def get_holding_item(self) -> Item | None:
+        for item in self.items:
+            if item.name == self.select_item:
+                return item
