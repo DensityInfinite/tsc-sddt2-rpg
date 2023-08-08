@@ -3,12 +3,12 @@ import resources.game_settings as game_settings, resources.utils as utils
 
 
 class _TileTrigger(pygame.sprite.Sprite):
-    def __init__(self) -> None:
+    def __init__(self, type: str) -> None:
         # Initialise
         pygame.sprite.Sprite.__init__(self)
         settings = game_settings.Map()
 
-        self.type = "neutral"  # neutral, obstruction, damage, link
+        self.type = type  # neutral, obstruction, damage, link
         self.link = None
 
         self.rect = pygame.Rect(0, 0, settings.tile_size, settings.tile_size)
@@ -25,6 +25,7 @@ class Grid:
 
     def init_grid(self, grid_id: int):
         grid = pygame.Surface(self.screen_settings.screen_size)
+        triggers = []
         grid_master: dict = self.json_utils.load_from_json(
             self.map_settings.grids_master_path
         )
@@ -57,5 +58,21 @@ class Grid:
             for tile in row:
                 if tile is not int:
                     grid.blit(textures[tile], cursor)
+                    triggers.append(_TileTrigger(self._get_type(tile)))
+                else:
+                    triggers.append(_TileTrigger("link"))
                 cursor = (cursor[0] + self.map_settings.tile_size, cursor[1])
             cursor = (0, cursor[1 + self.map_settings.tile_size])
+
+    def _get_type(self, tile_texture_name: str) -> str:
+        match tile_texture_name:
+            case "cave stone":
+                return "neutral"
+            case "paving stone":
+                return "neutral"
+            case "civilised rock":
+                return "obstruction"
+            case "lava":
+                return "damage"
+            case _:
+                return "obstruction"
