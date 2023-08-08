@@ -2,6 +2,21 @@ import pygame, os.path as path
 import resources.game_settings as game_settings, resources.utils as utils
 
 
+class _TileTrigger(pygame.sprite.Sprite):
+    def __init__(self) -> None:
+        # Initialise
+        pygame.sprite.Sprite.__init__(self)
+        settings = game_settings.Map()
+
+        self.type = "neutral"  # neutral, obstruction, damage, link
+        self.link = None
+
+        self.rect = pygame.Rect(0, 0, settings.tile_size, settings.tile_size)
+
+    def get_type(self) -> str:
+        return self.type
+
+
 class Grid:
     def __init__(self) -> None:
         self.screen_settings = game_settings.Screen()
@@ -44,17 +59,3 @@ class Grid:
                     grid.blit(textures[tile], cursor)
                 cursor = (cursor[0] + self.map_settings.tile_size, cursor[1])
             cursor = (0, cursor[1 + self.map_settings.tile_size])
-
-
-class _TileTrigger(pygame.sprite.Sprite):
-    def __init__(self) -> None:
-        # Initialise
-        pygame.sprite.Sprite.__init__(self)
-        settings = game_settings.Map()
-
-        self.type = "neutral"  # neutral, obstruction, damage
-
-        self.rect = pygame.Rect(0, 0, settings.tile_size, settings.tile_size)
-
-    def get_type(self) -> str:
-        return self.type
