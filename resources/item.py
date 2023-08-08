@@ -27,19 +27,14 @@ class Inventory:
                 self.items.remove(item)
                 break
 
+    def select_item(self, item_name):
+        for item in self.items:
+            if item.name == item_name:
+                self.selected_item = item_name
+                break
 
-def select_item(self, item_name):
-    for item in self.items:
-        if item.name == item_name:
-            self.selected_item = item_name
-            break
-    else:
-        print(f"Item '{item_name}' not found in the inventory.")
+    def get_items(self) -> list:
+        return self.items
 
-
-def get_items(self) -> list:
-    return self.items
-
-
-def get_holding_item(self) -> str:
-    return self.selected_item
+    def get_holding_item(self) -> str:
+        return self.selected_item
