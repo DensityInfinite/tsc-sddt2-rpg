@@ -18,6 +18,18 @@ class Combat:
         )
         self.enemy_health, self.enemy_defence = self.enemy.get_stats()
 
+        self.state = "player turn"  # player turn, player turn finished, enemy turn, enemy turn finished
+        self.last_state = self.state
+
     def update(self) -> None:
+        # Get updated stats
         self.player_health, _ = self.player.get_stats()
         self.enemy_health, _ = self.enemy.get_stats()
+
+        # Update state
+        match self.state:
+            case "player turn finished":
+                self.state = "enemy turn"
+            case "enemy turn finished":
+                self.state = "player turn"
+        self.last_state = self.state
