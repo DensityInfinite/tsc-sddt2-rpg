@@ -28,6 +28,8 @@ class Player(pygame.sprite.Sprite):
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
+        self.health = self.player_settings.max_heath
+        self.defence = 0.2
 
         self.image = pygame.Surface((self.tile_size, self.tile_size))
         self.image.fill((255, 0, 0))

@@ -14,6 +14,8 @@ class Enemy(pygame.sprite.Sprite):
         self.map_settings = settings.Map()
         self.enemy_settings = settings.Enemy()
 
+        self.health = self.enemy_settings.default_health
+        self.defence = self.enemy_settings.default_defence
         self.state = "alone"
         self.raw_speed = raw_speed
         self.movement = movement
@@ -26,6 +28,7 @@ class Enemy(pygame.sprite.Sprite):
             in_game_pos[1] * self.map_settings.tile_size
             - (self.map_settings.tile_size // 2),
         )
+
         self.image = pygame.Surface(
             (self.map_settings.tile_size, self.map_settings.tile_size)
         )

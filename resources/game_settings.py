@@ -14,6 +14,9 @@ class Player:
         self.speed = 6
         self.initial_position = (0, 0)
         self.colour = (255, 0, 0)
+        self.max_heath = 100
+        self.base_damage = 10
+        self.base_defence = 0.2
 
 
 class Enemy:
@@ -21,6 +24,8 @@ class Enemy:
         self.chase_time = 5
         self.time_increment = 2
         self.time_increment_dis = 50
+        self.default_health = 50
+        self.default_defence = 0.1
 
 
 class Map:
