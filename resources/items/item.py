@@ -12,6 +12,12 @@ class Item(pygame.sprite.Sprite):
         self.image = None
         self.rect = None
 
+    def get_name(self) -> str:
+        return self.name
+
+    def get_category(self) -> str:
+        return self.category
+
 
 class Inventory:
     def __init__(self):
