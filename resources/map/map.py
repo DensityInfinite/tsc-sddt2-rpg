@@ -23,8 +23,8 @@ class Grid:
         self.map_settings = game_settings.Map()
         self.json_utils = utils.JsonUtils()
 
-    def init_grid(self, grid_id: int):
-        grid = pygame.Surface(self.screen_settings.screen_size)
+    def init_grid(self, grid_id: int) -> tuple[pygame.Surface, list]:
+        grid_image = pygame.Surface(self.screen_settings.screen_size)
         triggers = []
         grid_master: dict = self.json_utils.load_from_json(
             self.map_settings.grids_master_path
@@ -57,12 +57,14 @@ class Grid:
             cursor = (0, 0)
             for tile in row:
                 if tile is not int:
-                    grid.blit(textures[tile], cursor)
+                    grid_image.blit(textures[tile], cursor)
                     triggers.append(_TileTrigger(self._get_type(tile)))
                 else:
                     triggers.append(_TileTrigger("link", link=tile))
                 cursor = (cursor[0] + self.map_settings.tile_size, cursor[1])
             cursor = (0, cursor[1 + self.map_settings.tile_size])
+
+        return grid_image, triggers
 
     def _get_type(self, tile_texture_name: str) -> str:
         match tile_texture_name:
