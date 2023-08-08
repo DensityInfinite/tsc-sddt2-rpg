@@ -2,7 +2,7 @@ import pygame, os.path as path
 import resources.game_settings as game_settings, resources.utils as utils
 
 
-class Map:
+class Grid:
     def __init__(self) -> None:
         self.screen_settings = game_settings.Screen()
         self.map_settings = game_settings.Map()
