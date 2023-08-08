@@ -1,0 +1,104 @@
+{
+    "tiles": [
+        [
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone"
+        ],
+        [
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone"
+        ],
+        [
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone"
+        ],
+        [
+            1,
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            2
+        ],
+        [
+            1,
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            2
+        ],
+        [
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone"
+        ],
+        [
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone"
+        ],
+        [
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone",
+            "cave stone",
+            "track",
+            "cave stone",
+            "cave stone"
+        ]
+    ],
+    "links": {
+        "1": null,
+        "2": null
+    }
+}

@@ -16,16 +16,20 @@ class Player:
         self.colour = (255, 0, 0)
 
 
-class Map:
-    def __init__(self) -> None:
-        self.tile_size = 50
-
-
 class Enemy:
     def __init__(self) -> None:
         self.chase_time = 5
         self.time_increment = 2
         self.time_increment_dis = 50
+
+
+class Map:
+    def __init__(self) -> None:
+        self.tile_size = 50
+        self.grids_master_path = path.join(
+            path.dirname(__file__), "resources/map/grids/grids_master.json"
+        )
+        self.textures_path = path.join(path.dirname(__file__), "resources/textures")
 
 
 class GUI:

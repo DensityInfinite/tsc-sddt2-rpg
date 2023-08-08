@@ -40,9 +40,9 @@ class Game:
                     pygame.quit()
                     exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self.cursor.sprite.register_click(True)
+                    self.cursor.sprite.register_click(True)  # type: ignore
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    self.cursor.sprite.register_click(False)
+                    self.cursor.sprite.register_click(False)  # type: ignore
 
             gui_group.update(self.cursor)
             self.cursor.update(pygame.mouse.get_pos())
