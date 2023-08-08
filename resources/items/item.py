@@ -2,7 +2,7 @@ import pygame
 
 
 class Item(pygame.sprite.Sprite):
-    def __init__(self, name, category):
+    def __init__(self, name: str, category: str):
         # Initialise
         pygame.sprite.Sprite.__init__(self)
 
@@ -42,7 +42,8 @@ class Inventory:
     def get_items(self) -> list:
         return self.items
 
-    def get_holding_item(self) -> Item | None:
+    def get_holding_item(self) -> Item:
         for item in self.items:
             if item.name == self.select_item:
                 return item
+        return Item("noSuchItem", "noSuchItem")
