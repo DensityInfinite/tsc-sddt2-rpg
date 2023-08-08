@@ -1,7 +1,16 @@
-class Item:
+import pygame
+
+
+class Item(pygame.sprite.Sprite):
     def __init__(self, name, category):
+        # Initialise
+        pygame.sprite.Sprite.__init__(self)
+
         self.name = name
         self.category = category
+
+        self.image = None
+        self.rect = None
 
 
 class Inventory:
