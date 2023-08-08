@@ -3,10 +3,9 @@ import math
 import random
 import resources.game_settings as settings
 
+
 class Enemy(pygame.sprite.Sprite):
-    def __init__(
-        self, in_game_pos, movement, raw_speed
-    ) -> None:
+    def __init__(self, in_game_pos, movement, raw_speed) -> None:
         # Initialise
         pygame.sprite.Sprite.__init__(self)
         self.colours = settings.Colours()
@@ -77,6 +76,9 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.centery += int(
                 math.copysign(1, error_y) * min(self.raw_speed, abs(error_y))
             )
+
+    def get_stats(self) -> tuple:
+        return self.health, self.defence
 
     def _reshuffle_state(self):
         states = ["moving"] * 75 + ["chasing"] * 25

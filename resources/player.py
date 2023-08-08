@@ -98,6 +98,9 @@ class Player(pygame.sprite.Sprite):
         self.moving_down = condition
         self.dy = self.tile_size // 3
 
+    def get_stats(self) -> tuple:
+        return self.health, self.defence
+
     def _move_stop(self) -> None:
         # Stop the player from moving.
         self._snap_to_grid_x()
