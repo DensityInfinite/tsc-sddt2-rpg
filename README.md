@@ -37,13 +37,13 @@ In order to achieve a good result with a clean codebase, we will be splitting th
 - [ ] Construct storyline
 - [x] Build basic `pygame` framework
 - [ ] Construct Modules
-  - [ ] Input and Events
+  - [x] Input and Events
   - [x] GUI elements (For now - more elements to be added later)
-  - [ ] Player Movement
-  - [ ] Map
+  - [x] Player Movement
+  - [x] Map
   - [x] Enemies
   - [ ] Combat
-  - [ ] Items
+  - [x] Items
   - [ ] NPCs and Dialogue (If have time)
   - [ ] Utility (Add on the way)
 - [ ] Assemble
