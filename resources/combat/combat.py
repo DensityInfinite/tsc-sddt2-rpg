@@ -33,3 +33,6 @@ class Combat:
             case "enemy turn finished":
                 self.state = "player turn"
         self.last_state = self.state
+
+    def next_state(self) -> None:
+        pass
