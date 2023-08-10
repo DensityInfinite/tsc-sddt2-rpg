@@ -47,6 +47,7 @@ In order to achieve a good result with a clean codebase, we will be splitting th
   - [ ] NPCs and Dialogue (If have time)
   - [ ] Utility (Add on the way)
 - [ ] Assemble
+  - [ ] Save and load system
   - [ ] Lighting system
   - [ ] Actual Maps
     - [ ] Enemies and combat triggers
