@@ -48,6 +48,11 @@ class GUI:
         self.inner_corner_decrement = 1
 
 
+class Events:
+    def __init__(self) -> None:
+        self.COMBAT = pygame.USEREVENT + 1
+
+
 class Fonts:
     def __init__(self) -> None:
         self.button_font_name = "cochin"
