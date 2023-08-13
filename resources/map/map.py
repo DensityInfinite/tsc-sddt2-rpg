@@ -66,7 +66,7 @@ class Grid:
                     grid_image.blit(textures[tile], cursor)
                     triggers.append(_TileTrigger(self._get_type(tile)))
                 else:
-                    triggers.append(_TileTrigger("link", link=tile))
+                    triggers.append(_TileTrigger("link", link=links[str(tile)]))
                 cursor = (cursor[0] + self.map_settings.tile_size, cursor[1])
             cursor = (0, cursor[1 + self.map_settings.tile_size])
 
