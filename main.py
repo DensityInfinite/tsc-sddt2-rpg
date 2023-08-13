@@ -4,7 +4,7 @@ from sys import exit
 import resources.utils as utils
 import resources.game_settings as game_settings
 import resources.gui.gui as gui
-
+from resources.map.map import Grid
 from resources.player import Player
 
 
@@ -40,12 +40,18 @@ class Game:
         self.player_group.add(self.player)
 
     def run_game(self) -> None:
-        gui_group = pygame.sprite.RenderUpdates()
+        map_surface, triggers_group, gui_group = self.init_level(-1)
         while 1:
             self.check_events()
-            self.update(gui_group)
-            self.render(gui_group)
+            self.update(triggers_group, gui_group)
+            self.render(map_surface, gui_group)
             self.clock.tick_busy_loop(self.screen_settings.fps)
+
+    def init_level(self, level: int) -> tuple:
+        grid = Grid(-1)
+        triggers_group = pygame.sprite.Group(grid.triggers)
+        gui_group = pygame.sprite.RenderUpdates()
+        return grid.image, triggers_group, gui_group
 
     def check_events(self):
         for event in pygame.event.get():
@@ -61,13 +67,14 @@ class Game:
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.cursor.sprite.register_click(False)  # type: ignore
 
-    def update(self, gui_group):
+    def update(self, triggers, gui_group):
         gui_group.update(self.cursor)
         self.player_group.update()
         self.cursor.update(pygame.mouse.get_pos())
 
-    def render(self, gui_group):
+    def render(self, map: pygame.Surface, gui_group):
         self.screen.fill(self.colours.background_colour)
+        self.screen.blit(map, (0, 0))
         gui_group.draw(self.screen)
         self.player_group.draw(self.screen)
         if self.cursor_settings.cursor_sprite_as_cursor:
