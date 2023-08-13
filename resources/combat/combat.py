@@ -37,5 +37,5 @@ class Combat:
                 self.state = "player turn"
         self.last_state = self.state
 
-    def next_state(self) -> None:
-        pass
+    def get_state(self) -> str:
+        return self.state
