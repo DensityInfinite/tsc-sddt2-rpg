@@ -79,6 +79,9 @@ class Enemy(pygame.sprite.Sprite):
 
     def get_stats(self) -> tuple:
         return self.health, self.defence
+    
+    def get_type(self) -> str:
+        return "enemy"
 
     def damage(self, damage) -> None:
         self.health -= damage
