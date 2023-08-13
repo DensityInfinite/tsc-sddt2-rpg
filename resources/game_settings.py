@@ -30,8 +30,8 @@ class Enemy:
         self.default_health = 50
         self.default_defence = 0.1
         self.attack_consistency = 0.6
-        self.escape_chance = 0.1
-
+        self.escape_chance = 0.15
+        self.escape_probability = 0.1
 
 class Map:
     def __init__(self) -> None:
