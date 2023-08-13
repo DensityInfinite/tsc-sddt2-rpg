@@ -14,6 +14,11 @@ class Player:
         self.speed = 6
         self.initial_position = (0, 0)
         self.colour = (255, 0, 0)
+        self.max_heath = 100
+        self.base_damage = 10
+        self.base_defence = 0.2
+        self.attack_consistency = 0.8
+        self.escape_chance = 0.3
 
 
 class Enemy:
@@ -22,6 +27,12 @@ class Enemy:
         self.time_increment = 2
         self.time_increment_dis = 50
 
+        self.base_damage = 7
+        self.default_health = 50
+        self.default_defence = 0.1
+        self.attack_consistency = 0.6
+        self.escape_chance = 0.15
+        self.escape_probability = 0.1
 
 class Map:
     def __init__(self) -> None:
@@ -36,6 +47,11 @@ class GUI:
     def __init__(self) -> None:
         self.rounded_corner_radius = 2
         self.inner_corner_decrement = 1
+
+
+class Events:
+    def __init__(self) -> None:
+        self.COMBAT = pygame.USEREVENT + 1
 
 
 class Fonts:

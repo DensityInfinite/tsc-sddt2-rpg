@@ -28,6 +28,8 @@ class Player(pygame.sprite.Sprite):
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
+        self.health = self.player_settings.max_heath
+        self.defence = 0.2
 
         self.image = pygame.Surface((self.tile_size, self.tile_size))
         self.image.fill((255, 0, 0))
@@ -95,6 +97,12 @@ class Player(pygame.sprite.Sprite):
     def set_moving_down(self, condition: bool) -> None:
         self.moving_down = condition
         self.dy = self.tile_size // 3
+
+    def get_stats(self) -> tuple:
+        return self.health, self.defence
+
+    def damage(self, damage) -> None:
+        self.health -= damage
 
     def _move_stop(self) -> None:
         # Stop the player from moving.
