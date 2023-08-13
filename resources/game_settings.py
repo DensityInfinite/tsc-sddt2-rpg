@@ -26,9 +26,11 @@ class Enemy:
         self.chase_time = 5
         self.time_increment = 2
         self.time_increment_dis = 50
+
         self.default_health = 50
         self.default_defence = 0.1
         self.attack_consistency = 0.6
+        self.escape_chance = 0.1
 
 
 class Map:
