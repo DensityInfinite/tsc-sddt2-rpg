@@ -17,6 +17,8 @@ class Player:
         self.max_heath = 100
         self.base_damage = 10
         self.base_defence = 0.2
+        self.attack_consistency = 0.8
+        self.escape_chance = 0.3
 
 
 class Enemy:
@@ -26,6 +28,7 @@ class Enemy:
         self.time_increment_dis = 50
         self.default_health = 50
         self.default_defence = 0.1
+        self.attack_consistency = 0.6
 
 
 class Map:
