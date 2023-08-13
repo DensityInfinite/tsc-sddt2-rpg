@@ -34,21 +34,27 @@ class Grid:
         tiles: list = grid_file["tiles"]
         links: dict = grid_file["links"]
         textures = {
-            "cave stone": pygame.transform.scale(
+            " ": pygame.transform.scale(
                 pygame.image.load(
                     path.join(self.map_settings.textures_path, "Cave Rocks.jpg")
                 ).convert(),
                 (self.map_settings.tile_size, self.map_settings.tile_size),
             ),
-            "civilised rocks": pygame.transform.scale(
+            "#": pygame.transform.scale(
                 pygame.image.load(
                     path.join(self.map_settings.textures_path, "Civilised Rock.jpg")
                 ).convert(),
                 (self.map_settings.tile_size, self.map_settings.tile_size),
             ),
-            "track": pygame.transform.scale(
+            "-": pygame.transform.scale(
                 pygame.image.load(
                     path.join(self.map_settings.textures_path, "Paving Stones.jpg")
+                ).convert(),
+                (self.map_settings.tile_size, self.map_settings.tile_size),
+            ),
+            "~": pygame.transform.scale(
+                pygame.image.load(
+                    path.join(self.map_settings.textures_path, "Lava.jpg")
                 ).convert(),
                 (self.map_settings.tile_size, self.map_settings.tile_size),
             ),
@@ -60,7 +66,7 @@ class Grid:
                     grid_image.blit(textures[tile], cursor)
                     triggers.append(_TileTrigger(self._get_type(tile)))
                 else:
-                    triggers.append(_TileTrigger("link", link=tile))
+                    triggers.append(_TileTrigger("link", link=links[str(tile)]))
                 cursor = (cursor[0] + self.map_settings.tile_size, cursor[1])
             cursor = (0, cursor[1 + self.map_settings.tile_size])
 
@@ -68,13 +74,13 @@ class Grid:
 
     def _get_type(self, tile_texture_name: str) -> str:
         match tile_texture_name:
-            case "cave stone":
+            case " ":  # cave stone
                 return "neutral"
-            case "paving stone":
+            case "-":  # paving stone
                 return "neutral"
-            case "civilised rock":
+            case "#":  # civilised rock
                 return "obstruction"
-            case "lava":
+            case "~":  # lava
                 return "damage"
             case _:
                 return "obstruction"
