@@ -19,6 +19,7 @@ class Player:
         self.base_defence = 0.2
         self.attack_consistency = 0.8
         self.escape_chance = 0.3
+        self.tile_damage_interval = 30
 
 
 class Enemy:
