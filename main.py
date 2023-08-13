@@ -5,6 +5,8 @@ import resources.utils as utils
 import resources.game_settings as game_settings
 import resources.gui.gui as gui
 
+from resources.player import Player
+
 
 class Game:
     def __init__(self) -> None:
@@ -32,27 +34,66 @@ class Game:
         self.cursor = pygame.sprite.GroupSingle()
         self.cursor.add(gui.Cursor())
 
+        # Player
+        self.player = Player((8, 12))
+        self.player_group = pygame.sprite.GroupSingle()
+        self.player_group.add(self.player)
+
     def run_game(self) -> None:
         gui_group = pygame.sprite.RenderUpdates()
         while 1:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self.cursor.sprite.register_click(True)  # type: ignore
-                elif event.type == pygame.MOUSEBUTTONUP:
-                    self.cursor.sprite.register_click(False)  # type: ignore
+            self.check_events()
+            self.update(gui_group)
+            self.render(gui_group)
+            self.clock.tick_busy_loop(self.screen_settings.fps)
 
-            gui_group.update(self.cursor)
-            self.cursor.update(pygame.mouse.get_pos())
+    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            elif event.type == pygame.KEYDOWN:
+                self._check_keydown_events(event)
+            elif event.type == pygame.KEYUP:
+                self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.cursor.sprite.register_click(True)  # type: ignore
+            elif event.type == pygame.MOUSEBUTTONUP:
+                self.cursor.sprite.register_click(False)  # type: ignore
 
-            self.screen.fill(self.colours.background_colour)
-            gui_group.draw(self.screen)
-            if self.cursor_settings.cursor_sprite_as_cursor:
-                self.cursor.draw(self.screen)
+    def update(self, gui_group):
+        gui_group.update(self.cursor)
+        self.player_group.update()
+        self.cursor.update(pygame.mouse.get_pos())
 
-            pygame.display.update()
+    def render(self, gui_group):
+        self.screen.fill(self.colours.background_colour)
+        gui_group.draw(self.screen)
+        self.player_group.draw(self.screen)
+        if self.cursor_settings.cursor_sprite_as_cursor:
+            self.cursor.draw(self.screen)
+
+        pygame.display.update()
+
+    def _check_keydown_events(self, event) -> None:
+        if event.key == pygame.K_w or event.key == pygame.K_UP:
+            self.player.set_moving_up(True)
+        elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
+            self.player.set_moving_down(True)
+        if event.key == pygame.K_a or event.key == pygame.K_LEFT:
+            self.player.set_moving_left(True)
+        elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+            self.player.set_moving_right(True)
+
+    def _check_keyup_events(self, event) -> None:
+        if event.key == pygame.K_w or event.key == pygame.K_UP:
+            self.player.set_moving_up(False)
+        elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
+            self.player.set_moving_down(False)
+        if event.key == pygame.K_a or event.key == pygame.K_LEFT:
+            self.player.set_moving_left(False)
+        elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+            self.player.set_moving_right(False)
 
 
 if __name__ == "__main__":

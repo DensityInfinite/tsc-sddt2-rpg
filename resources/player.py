@@ -4,19 +4,25 @@ import resources.game_settings as game_settings
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(
-        self,
-        x: int,
-        y: int,
-    ):
+    def __init__(self, in_game_pos: tuple[int, int]):
         # Initialise the Player object.
-        pygame.sprite.Sprite().__init__()
-        self.target_x = x
-        self.target_y = y
+        pygame.sprite.Sprite.__init__(self)
 
         self.player_settings = game_settings.Player()
         self.screen_settings = game_settings.Screen()
         self.map_settings = game_settings.Map()
+        self.colours = game_settings.Colours()
+
+        self.raw_pos = (
+            in_game_pos[0] * self.map_settings.tile_size
+            - (self.map_settings.tile_size // 2),
+            in_game_pos[1] * self.map_settings.tile_size
+            - (self.map_settings.tile_size // 2),
+        )
+        x = self.raw_pos[0]
+        y = self.raw_pos[1]
+        self.target_x = x
+        self.target_y = y
         self.speed = self.player_settings.speed
         self.screen_width = self.screen_settings.screen_size[0]
         self.screen_height = self.screen_settings.screen_size[1]
@@ -32,7 +38,7 @@ class Player(pygame.sprite.Sprite):
         self.defence = 0.2
 
         self.image = pygame.Surface((self.tile_size, self.tile_size))
-        self.image.fill((255, 0, 0))
+        self.image.fill(self.colours.white)
         self.rect: pygame.rect.Rect = self.image.get_rect()
         self.rect.center = (x, y)
 
