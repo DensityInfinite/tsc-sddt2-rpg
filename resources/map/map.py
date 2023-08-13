@@ -17,20 +17,25 @@ class _TileTrigger(pygame.sprite.Sprite):
         return self.type
 
 
-class Grid:
-    def __init__(self) -> None:
+class Grid(pygame.sprite.Sprite):
+    def __init__(self, grid_id: int) -> None:
+        pygame.sprite.Sprite.__init__(self)
         self.screen_settings = game_settings.Screen()
         self.map_settings = game_settings.Map()
         self.json_utils = utils.JsonUtils()
 
-    def init_grid(self, grid_id: int) -> tuple[pygame.Surface, list]:
+        self.image, self.triggers = self._init_grid(grid_id)
+
+    def _init_grid(self, grid_id: int) -> tuple[pygame.Surface, list]:
         grid_image = pygame.Surface(self.screen_settings.screen_size)
         triggers = []
         grid_master: dict = self.json_utils.load_from_json(
             self.map_settings.grids_master_path
         )
-        grid_path = grid_master[grid_id]["file"]
-        grid_file: dict = self.json_utils.load_from_json(grid_path)
+        grid_file_name = grid_master[str(grid_id)]["file"]
+        grid_file: dict = self.json_utils.load_from_json(
+            path.join(self.map_settings.grids_path, grid_file_name)
+        )
         tiles: list = grid_file["tiles"]
         links: dict = grid_file["links"]
         textures = {
@@ -59,16 +64,16 @@ class Grid:
                 (self.map_settings.tile_size, self.map_settings.tile_size),
             ),
         }
+        cursor = (0, 0)
         for row in tiles:
-            cursor = (0, 0)
             for tile in row:
-                if tile is not int:
+                if not isinstance(tile, int):
                     grid_image.blit(textures[tile], cursor)
                     triggers.append(_TileTrigger(self._get_type(tile)))
                 else:
                     triggers.append(_TileTrigger("link", link=links[str(tile)]))
                 cursor = (cursor[0] + self.map_settings.tile_size, cursor[1])
-            cursor = (0, cursor[1 + self.map_settings.tile_size])
+            cursor = (0, cursor[1] + self.map_settings.tile_size)
 
         return grid_image, triggers
 

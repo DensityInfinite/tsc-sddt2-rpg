@@ -34,13 +34,15 @@ class Enemy:
         self.escape_chance = 0.15
         self.escape_probability = 0.1
 
+
 class Map:
     def __init__(self) -> None:
         self.tile_size = 50
         self.grids_master_path = path.join(
-            path.dirname(__file__), "resources/map/grids/grids_master.json"
+            path.dirname(__file__), "map/grids/grids_master.json"
         )
-        self.textures_path = path.join(path.dirname(__file__), "resources/textures")
+        self.grids_path = path.join(path.dirname(__file__), "map/grids")
+        self.textures_path = path.join(path.dirname(__file__), "textures")
 
 
 class GUI:
