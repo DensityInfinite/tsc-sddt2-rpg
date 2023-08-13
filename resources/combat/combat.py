@@ -11,6 +11,9 @@ class Combat:
         self.enemy = enemy
 
         self.player_settings = game_settings.Player()
+        self.enemy_settings = game_settings.Enemy()
+        self.events = game_settings.Events()
+
         self.player_health, self.player_defence = self.player.get_stats()
         self.player_base_damage = self.player_settings.base_damage
         self.player_dmg_boost = (
