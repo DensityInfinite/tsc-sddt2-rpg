@@ -80,6 +80,9 @@ class Enemy(pygame.sprite.Sprite):
     def get_stats(self) -> tuple:
         return self.health, self.defence
 
+    def damage(self, damage) -> None:
+        self.health -= damage
+
     def _reshuffle_state(self):
         states = ["moving"] * 75 + ["chasing"] * 25
         return random.choice(states)

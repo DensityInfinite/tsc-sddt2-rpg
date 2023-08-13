@@ -101,6 +101,9 @@ class Player(pygame.sprite.Sprite):
     def get_stats(self) -> tuple:
         return self.health, self.defence
 
+    def damage(self, damage) -> None:
+        self.health -= damage
+
     def _move_stop(self) -> None:
         # Stop the player from moving.
         self._snap_to_grid_x()
