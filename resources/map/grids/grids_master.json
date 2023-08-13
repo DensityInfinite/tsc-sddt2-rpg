@@ -1,5 +1,8 @@
 {
     "-1": {
         "file": "debug_grid.json"
+    },
+    "1": {
+        "file": "home.json"
     }
 }
