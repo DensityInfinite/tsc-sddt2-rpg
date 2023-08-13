@@ -34,26 +34,25 @@ In order to achieve a good result with a clean codebase, we will be splitting th
 
 ### Steps
 
-- [ ] Construct storyline
 - [x] Build basic `pygame` framework
-- [ ] Construct Modules
+- [x] Construct Modules
   - [x] Input and Events
   - [x] GUI elements (For now - more elements to be added later)
   - [x] Player Movement
   - [x] Map
   - [x] Enemies
-  - [ ] Combat
+  - [x] Combat
   - [x] Items
   - [ ] NPCs and Dialogue (If have time)
-  - [ ] Utility (Add on the way)
+  - [x] Utility (Add on the way)
 - [ ] Assemble
   - [ ] Save and load system
-  - [ ] Lighting system
-  - [ ] Actual Maps
-    - [ ] Enemies and combat triggers
+  - [x] Actual Maps
+    - [x] Enemies and combat triggers
     - [ ] NPCs (If made)
   - [ ] Menus
   - [ ] Game Progress (Tutorial, boss etc.)
+  - [ ] Construct storyline (If have time)
 
 ### Possible Problems
 
