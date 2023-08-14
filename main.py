@@ -17,6 +17,7 @@ class Game:
         self.screen_settings = game_settings.Screen()
         self.colours = game_settings.Colours()
         self.cursor_settings = game_settings.Cursor()
+        self.player_settings = game_settings.Player()
         self.gui = gui
 
         # Screen
@@ -35,15 +36,16 @@ class Game:
         self.cursor.add(gui.Cursor())
 
         # Player
-        self.player = Player((8, 12))
+        self.player: Player = Player((8, 12))
         self.player_group = pygame.sprite.GroupSingle()
         self.player_group.add(self.player)
+        self.last_damage_counter = self.player_settings.tile_damage_interval
 
     def run_game(self) -> None:
         map_surface, triggers_group, gui_group = self.init_level(-1)
         while 1:
-            self.check_events()
-            self.update(triggers_group, gui_group)
+            self.check_events(triggers_group)
+            self.update(gui_group)
             self.render(map_surface, gui_group)
             self.clock.tick_busy_loop(self.screen_settings.fps)
 
@@ -53,7 +55,7 @@ class Game:
         gui_group = pygame.sprite.RenderUpdates()
         return grid.image, triggers_group, gui_group
 
-    def check_events(self):
+    def check_events(self, triggers):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -67,7 +69,20 @@ class Game:
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.cursor.sprite.register_click(False)  # type: ignore
 
-    def update(self, triggers, gui_group):
+        for sprite in pygame.sprite.spritecollide(self.player, triggers, False):
+            if sprite.get_type() == "damage":
+                self.player.collision(False)
+                if self.last_damage_counter <= 0:
+                    self.player.damage(2)
+                    self.last_damage_counter = self.player_settings.tile_damage_interval
+            elif sprite.get_type() == "obstruction":
+                self.player.collision(True)
+            else:
+                self.player.collision(False)
+
+        self.last_damage_counter -= 1 if self.last_damage_counter > 0 else 0
+
+    def update(self, gui_group):
         gui_group.update(self.cursor)
         self.player_group.update()
         self.cursor.update(pygame.mouse.get_pos())
