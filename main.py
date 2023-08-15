@@ -6,6 +6,7 @@ import resources.game_settings as game_settings
 import resources.gui.gui as gui
 from resources.map.map import Grid
 from resources.player import Player
+from resources.enemies.enemy import Enemy
 
 
 class Game:
@@ -42,18 +43,19 @@ class Game:
         self.last_damage_counter = self.player_settings.tile_damage_interval
 
     def run_game(self) -> None:
-        map_surface, triggers_group, gui_group = self.init_level(-1)
+        map_surface, triggers_group, gui_group, enemy_group = self.init_level(-1)
         while 1:
             self.check_events(triggers_group)
-            self.update(gui_group)
-            self.render(map_surface, gui_group)
+            self.update(gui_group, enemy_group)
+            self.render(map_surface, gui_group, enemy_group)
             self.clock.tick_busy_loop(self.screen_settings.fps)
 
     def init_level(self, level: int) -> tuple:
         grid = Grid(-1)
         triggers_group = pygame.sprite.Group(grid.triggers)
         gui_group = pygame.sprite.RenderUpdates()
-        return grid.image, triggers_group, gui_group
+        enemy_group = pygame.sprite.RenderUpdates()
+        return grid.image, triggers_group, gui_group, enemy_group
 
     def check_events(self, triggers):
         for event in pygame.event.get():
@@ -82,16 +84,19 @@ class Game:
 
         self.last_damage_counter -= 1 if self.last_damage_counter > 0 else 0
 
-    def update(self, gui_group):
+    def update(self, gui_group, enemy_group):
         gui_group.update(self.cursor)
         self.player_group.update()
+        enemy_group.update(self.player.get_raw_pos())
         self.cursor.update(pygame.mouse.get_pos())
 
-    def render(self, map: pygame.Surface, gui_group):
+    def render(self, map: pygame.Surface, gui_group, enemy_group):
         self.screen.fill(self.colours.background_colour)
         self.screen.blit(map, (0, 0))
-        gui_group.draw(self.screen)
+
+        enemy_group.draw(self.screen)
         self.player_group.draw(self.screen)
+        gui_group.draw(self.screen)
         if self.cursor_settings.cursor_sprite_as_cursor:
             self.cursor.draw(self.screen)
 

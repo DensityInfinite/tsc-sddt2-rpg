@@ -113,6 +113,9 @@ class Player(pygame.sprite.Sprite):
 
     def get_stats(self) -> tuple:
         return self.health, self.defence
+    
+    def get_raw_pos(self) -> tuple:
+        return self.rect.center
 
     def damage(self, damage) -> None:
         self.health -= damage
