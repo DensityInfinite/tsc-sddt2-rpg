@@ -54,7 +54,9 @@ class GUI:
 
 class Events:
     def __init__(self) -> None:
-        self.COMBAT = pygame.USEREVENT + 1
+        self.combat = pygame.USEREVENT + 1
+        self.button_pressed_event = pygame.USEREVENT + 2
+
 
 
 class Fonts:
@@ -82,8 +84,3 @@ class Cursor:
         self.cursor_sprite_size = 1
         self.cursor_sprite_as_cursor = False
         self.cursor_offset = (-1, -1)
-
-
-class Dev:
-    def __init__(self) -> None:
-        self.button_pressed_event = pygame.USEREVENT + 1
