@@ -20,6 +20,7 @@ class Enemy(pygame.sprite.Sprite):
         self.movement = movement
         self.chase_time = self.enemy_settings.chase_time * self.screen_settings.fps
         self.tick_counter = 0
+        self.is_colliding = False
         self.in_game_pos = in_game_pos
         self.raw_pos = (
             in_game_pos[0] * self.map_settings.tile_size
@@ -31,7 +32,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.Surface(
             (self.map_settings.tile_size, self.map_settings.tile_size)
         )
-        self.image.fill(self.colours.red)
+        self.image.fill(self.colours.background_colour)
         self.rect: pygame.rect.Rect = self.image.get_rect()
         self.rect.center = self.raw_pos
 
@@ -61,11 +62,12 @@ class Enemy(pygame.sprite.Sprite):
                         < self.enemy_settings.time_increment_dis
                     ):
                         self.chase_time += self.enemy_settings.time_increment
-                    if self.chase_time < 0:
+                    if self.chase_time < 0 or self.is_colliding:
                         self.state = "alone"
                         self.chase_time = (
                             self.enemy_settings.chase_time * self.screen_settings.fps
                         )
+
 
         # Move the enemy
         if abs(error_x) != 0:
@@ -82,12 +84,21 @@ class Enemy(pygame.sprite.Sprite):
     
     def get_type(self) -> str:
         return "enemy"
+    
+    def get_raw_pos(self) -> tuple[int, int]:
+        return self.rect.center
 
     def damage(self, damage) -> None:
         self.health -= damage
 
+    def collision(self, is_colliding: bool) -> None:
+        self.is_colliding = is_colliding
+
+    def get_is_colliding(self) -> bool:
+        return self.is_colliding
+
     def _reshuffle_state(self):
-        states = ["moving"] * 75 + ["chasing"] * 25
+        states = ["moving"] * 50 + ["chasing"] * 50 # 75, 25
         return random.choice(states)
 
     def _get_target(
@@ -113,7 +124,10 @@ class Enemy(pygame.sprite.Sprite):
             target_x = self.raw_pos[0]
             target_y = self.raw_pos[1]
         elif state == "chasing":
-            target_x = player_raw_pos[0]
-            target_y = player_raw_pos[1]
+            if not self.is_colliding:
+                target_x = player_raw_pos[0]
+                target_y = player_raw_pos[1]
+            else:
+                target_x, target_y = self.rect.center
 
         return (target_x, target_y)

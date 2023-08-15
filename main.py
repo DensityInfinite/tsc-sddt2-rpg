@@ -45,7 +45,7 @@ class Game:
     def run_game(self) -> None:
         map_surface, triggers_group, gui_group, enemy_group = self.init_level(-1)
         while 1:
-            self.check_events(triggers_group)
+            self.check_events(triggers_group, enemy_group)
             self.update(gui_group, enemy_group)
             self.render(map_surface, gui_group, enemy_group)
             self.clock.tick_busy_loop(self.screen_settings.fps)
@@ -54,10 +54,10 @@ class Game:
         grid = Grid(-1)
         triggers_group = pygame.sprite.Group(grid.triggers)
         gui_group = pygame.sprite.RenderUpdates()
-        enemy_group = pygame.sprite.RenderUpdates()
+        enemy_group = pygame.sprite.RenderUpdates(grid.enemies)
         return grid.image, triggers_group, gui_group, enemy_group
 
-    def check_events(self, triggers):
+    def check_events(self, triggers, enemy_group: pygame.sprite.RenderUpdates):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -81,6 +81,23 @@ class Game:
                 self.player.collision(True)
             else:
                 self.player.collision(False)
+
+        for enemy, sprites in pygame.sprite.groupcollide(enemy_group, triggers, False, False).items():
+            modified = False
+            for sprite in sprites:
+                if not modified:
+                    if sprite.get_type() == "damage":
+                        if enemy.get_is_colliding(): # type: ignore
+                            modified = True
+                        enemy.collision(False) # type: ignore
+                    elif sprite.get_type() == "obstruction":
+                        if not enemy.get_is_colliding(): # type: ignore
+                            modified = True
+                        enemy.collision(True) # type: ignore
+                    else:
+                        if enemy.get_is_colliding(): # type: ignore
+                            modified = True
+                        enemy.collision(False) # type: ignore
 
         self.last_damage_counter -= 1 if self.last_damage_counter > 0 else 0
 
