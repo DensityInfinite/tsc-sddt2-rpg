@@ -7,6 +7,8 @@ import resources.gui.gui as gui
 from resources.map.map import Grid
 from resources.player import Player
 from resources.enemies.enemy import Enemy
+from resources.items.item import Inventory
+from resources.combat.combat import Combat
 
 
 class Game:
@@ -19,6 +21,7 @@ class Game:
         self.colours = game_settings.Colours()
         self.cursor_settings = game_settings.Cursor()
         self.player_settings = game_settings.Player()
+        self.events = game_settings.Events()
         self.gui = gui
 
         # Screen
@@ -41,8 +44,12 @@ class Game:
         self.player_group = pygame.sprite.GroupSingle()
         self.player_group.add(self.player)
         self.last_damage_counter = self.player_settings.tile_damage_interval
+        self.inventory = Inventory()
 
     def run_game(self) -> None:
+        self.level()
+
+    def level(self) -> None:
         map_surface, triggers_group, gui_group, enemy_group = self.init_level(-1)
         while 1:
             self.check_events(triggers_group, enemy_group)
@@ -57,7 +64,12 @@ class Game:
         enemy_group = pygame.sprite.RenderUpdates(grid.enemies)
         return grid.image, triggers_group, gui_group, enemy_group
 
-    def check_events(self, triggers, enemy_group: pygame.sprite.RenderUpdates):
+    def check_events(
+        self,
+        triggers,
+        enemy_group: pygame.sprite.RenderUpdates,
+        check_collision: bool = True,
+    ):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -70,36 +82,7 @@ class Game:
                 self.cursor.sprite.register_click(True)  # type: ignore
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.cursor.sprite.register_click(False)  # type: ignore
-
-        for sprite in pygame.sprite.spritecollide(self.player, triggers, False):
-            if sprite.get_type() == "damage":
-                self.player.collision(False)
-                if self.last_damage_counter <= 0:
-                    self.player.damage(2)
-                    self.last_damage_counter = self.player_settings.tile_damage_interval
-            elif sprite.get_type() == "obstruction":
-                self.player.collision(True)
-            else:
-                self.player.collision(False)
-
-        for enemy, sprites in pygame.sprite.groupcollide(enemy_group, triggers, False, False).items():
-            modified = False
-            for sprite in sprites:
-                if not modified:
-                    if sprite.get_type() == "damage":
-                        if enemy.get_is_colliding(): # type: ignore
-                            modified = True
-                        enemy.collision(False) # type: ignore
-                    elif sprite.get_type() == "obstruction":
-                        if not enemy.get_is_colliding(): # type: ignore
-                            modified = True
-                        enemy.collision(True) # type: ignore
-                    else:
-                        if enemy.get_is_colliding(): # type: ignore
-                            modified = True
-                        enemy.collision(False) # type: ignore
-
-        self.last_damage_counter -= 1 if self.last_damage_counter > 0 else 0
+            self._check_collision_events(event, triggers, enemy_group)
 
     def update(self, gui_group, enemy_group):
         gui_group.update(self.cursor)
@@ -118,6 +101,73 @@ class Game:
             self.cursor.draw(self.screen)
 
         pygame.display.update()
+
+    def combat(self, enemy):
+        tracker = Combat(self.player, enemy, self.inventory)
+        gui_group = pygame.sprite.RenderUpdates()
+        gui_group.add(
+            gui.Overlay(
+                pygame.Rect(
+                    self.screen_width // 2,
+                    self.screen_height // 2,
+                    self.screen_width,
+                    self.screen_height,
+                ),
+                0,
+                self.colours.background_colour
+            ),
+            gui.Text(
+                "cochin",
+                "Battle against the Void",
+                (self.screen_width // 2, int(self.screen_height * 0.1)),
+                self.colours.white,
+                30,
+            ),
+        )
+        background = self._get_screen_as_surface()
+        while 1:
+            # Collect Events
+            button_pressed = -1
+            combat_event = None
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                elif event.type == pygame.KEYDOWN:
+                    self._check_keydown_events(event)
+                elif event.type == pygame.KEYUP:
+                    self._check_keyup_events(event)
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    self.cursor.sprite.register_click(True)  # type: ignore
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    self.cursor.sprite.register_click(False)  # type: ignore
+                elif event.type == self.events.button_pressed_event:
+                    button_pressed = event.index
+                elif event.type == self.events.combat:
+                    combat_event = event
+
+            # Update the combat
+            tracker.update(button_pressed)
+            gui_group.update(self.cursor)
+
+            # Render
+            self.screen.fill(self.colours.background_colour)
+            self.screen.blit(background, (0, 0))
+            gui_group.draw(self.screen)
+            if self.cursor_settings.cursor_sprite_as_cursor:
+                self.cursor.draw(self.screen)
+
+            pygame.display.update()
+            self.clock.tick_busy_loop(self.screen_settings.fps)
+
+    def _get_screen_as_surface(self) -> pygame.Surface:
+        surface = pygame.Surface(
+            (self.screen_width, self.screen_height), pygame.SRCALPHA
+        )
+        surface.blit(
+            self.screen, pygame.Rect(0, 0, self.screen_width, self.screen_height)
+        )
+        return surface
 
     def _check_keydown_events(self, event) -> None:
         if event.key == pygame.K_w or event.key == pygame.K_UP:
@@ -138,6 +188,42 @@ class Game:
             self.player.set_moving_left(False)
         elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
             self.player.set_moving_right(False)
+
+    def _check_collision_events(self, event, triggers, enemy_group) -> None:
+        for sprite in pygame.sprite.spritecollide(self.player, triggers, False):
+            if sprite.get_type() == "damage":
+                self.player.collision(False)
+                if self.last_damage_counter <= 0:
+                    self.player.damage(2)
+                    self.last_damage_counter = self.player_settings.tile_damage_interval
+            elif sprite.get_type() == "obstruction":
+                self.player.collision(True)
+            else:
+                self.player.collision(False)
+
+        for enemy, sprites in pygame.sprite.groupcollide(
+            enemy_group, triggers, False, False
+        ).items():
+            modified = False
+            for sprite in sprites:
+                if not modified:
+                    if sprite.get_type() == "damage":
+                        if enemy.get_is_colliding():  # type: ignore
+                            modified = True
+                        enemy.collision(False)  # type: ignore
+                    elif sprite.get_type() == "obstruction":
+                        if not enemy.get_is_colliding():  # type: ignore
+                            modified = True
+                        enemy.collision(True)  # type: ignore
+                    else:
+                        if enemy.get_is_colliding():  # type: ignore
+                            modified = True
+                        enemy.collision(False)  # type: ignore
+
+        for enemy in pygame.sprite.spritecollide(self.player, enemy_group, False):
+            self.combat(enemy)
+
+        self.last_damage_counter -= 1 if self.last_damage_counter > 0 else 0
 
 
 if __name__ == "__main__":

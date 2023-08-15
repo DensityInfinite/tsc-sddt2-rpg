@@ -1,5 +1,5 @@
 import pygame, random
-import game_settings
+import resources.game_settings as game_settings
 from resources.player import Player
 from resources.enemies.enemy import Enemy
 from resources.items.item import Inventory
@@ -32,7 +32,7 @@ class Combat:
         # Emit event if combat has ended
         if self.player_health <= 0 or self.enemy_health <= 0:
             dead = "player" if self.player_health <= 0 else "enemy"
-            pygame.event.post(pygame.event.Event(self.events.COMBAT, dead=dead))
+            pygame.event.post(pygame.event.Event(self.events.combat, dead=dead))
 
         if self.state == "player turn":
             match action:  # 1: attack, 2: item (not yet implemented), 3: escape
@@ -45,13 +45,13 @@ class Combat:
                         )
                         pygame.event.post(
                             pygame.event.Event(
-                                self.events.COMBAT, turn=self.state, attack_success=True
+                                self.events.combat, turn=self.state, attack_success=True
                             )
                         )
                     else:
                         pygame.event.post(
                             pygame.event.Event(
-                                self.events.COMBAT,
+                                self.events.combat,
                                 turn=self.state,
                                 attack_success=False,
                             )
@@ -61,13 +61,13 @@ class Combat:
                     if result <= self.player_settings.escape_chance:
                         pygame.event.post(
                             pygame.event.Event(
-                                self.events.COMBAT, turn=self.state, escape_success=True
+                                self.events.combat, turn=self.state, escape_success=True
                             )
                         )
                     else:
                         pygame.event.post(
                             pygame.event.Event(
-                                self.events.COMBAT,
+                                self.events.combat,
                                 turn=self.state,
                                 escape_success=False,
                             )
@@ -79,18 +79,17 @@ class Combat:
                 result = random.random()
                 if result <= self.enemy_settings.attack_consistency:
                     self.enemy.damage(
-                        self.enemy_settings.base_damage
-                        * (1 - self.player_defence)
+                        self.enemy_settings.base_damage * (1 - self.player_defence)
                     )
                     pygame.event.post(
                         pygame.event.Event(
-                            self.events.COMBAT, turn=self.state, attack_success=True
+                            self.events.combat, turn=self.state, attack_success=True
                         )
                     )
                 else:
                     pygame.event.post(
                         pygame.event.Event(
-                            self.events.COMBAT,
+                            self.events.combat,
                             turn=self.state,
                             attack_success=False,
                         )
@@ -101,14 +100,14 @@ class Combat:
                     # Emit an event indicating the enemy's escape fail
                     pygame.event.post(
                         pygame.event.Event(
-                            self.events.COMBAT, turn=self.state, escape_success=True
+                            self.events.combat, turn=self.state, escape_success=True
                         )
                     )
                 else:
                     # Emit an event indicating the enemy's escape fail
                     pygame.event.post(
                         pygame.event.Event(
-                            self.events.COMBAT, turn=self.state, escape_success=False
+                            self.events.combat, turn=self.state, escape_success=False
                         )
                     )
             # Mark the end of the enemy's turn
