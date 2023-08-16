@@ -68,7 +68,6 @@ class Enemy(pygame.sprite.Sprite):
                             self.enemy_settings.chase_time * self.screen_settings.fps
                         )
 
-
         # Move the enemy
         if abs(error_x) != 0:
             self.rect.centerx += int(
@@ -81,10 +80,10 @@ class Enemy(pygame.sprite.Sprite):
 
     def get_stats(self) -> tuple:
         return self.health, self.defence
-    
+
     def get_type(self) -> str:
         return "enemy"
-    
+
     def get_raw_pos(self) -> tuple[int, int]:
         return self.rect.center
 
@@ -98,7 +97,7 @@ class Enemy(pygame.sprite.Sprite):
         return self.is_colliding
 
     def _reshuffle_state(self):
-        states = ["moving"] * 50 + ["chasing"] * 50 # 75, 25
+        states = ["moving"] * 75 + ["chasing"] * 25  # 75, 25
         return random.choice(states)
 
     def _get_target(
