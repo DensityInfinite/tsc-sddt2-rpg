@@ -1,4 +1,4 @@
-import pygame, json
+import pygame
 from sys import exit
 
 import resources.utils as utils
@@ -114,7 +114,7 @@ class Game:
                     self.screen_height,
                 ),
                 0,
-                self.colours.background_colour
+                self.colours.background_colour,
             ),
             gui.Text(
                 "cochin",
@@ -222,6 +222,7 @@ class Game:
 
         for enemy in pygame.sprite.spritecollide(self.player, enemy_group, False):
             self.combat(enemy)
+            break
 
         self.last_damage_counter -= 1 if self.last_damage_counter > 0 else 0
 
