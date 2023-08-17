@@ -7,6 +7,7 @@ class Button(pygame.sprite.Sprite):
         rect: pygame.Rect,
         text: str,
         colour: pygame.Color,
+        index: int,
         clickable: bool = True,
     ) -> None:
         # Initialise
@@ -19,11 +20,12 @@ class Button(pygame.sprite.Sprite):
 
         self.dimensions = rect
         self.colour = colour
+        self.index = index
 
         self.clickable = clickable
         self.state = "idle"
         self.last_state = "idle"
-        self.event = pygame.event.Event(self.events.button_pressed_event, index=self)
+        self.event = pygame.event.Event(self.events.button_pressed_event, index=index)
         self.event_posted = False
 
         # Image
@@ -202,7 +204,9 @@ class Cursor(pygame.sprite.Sprite):
 
 
 class Overlay(pygame.sprite.Sprite):
-    def __init__(self, rect: pygame.Rect, rounded_corner_radius: int, colour: pygame.Color) -> None:
+    def __init__(
+        self, rect: pygame.Rect, rounded_corner_radius: int, colour: pygame.Color
+    ) -> None:
         # Initialise
         pygame.sprite.Sprite.__init__(self)
         self.colours = game_settings.Colours()

@@ -21,7 +21,7 @@ class Combat:
         )
         self.enemy_health, self.enemy_defence = self.enemy.get_stats()
 
-        self.state = "player turn"  # player turn, player turn finished, enemy turn, enemy turn finished
+        self.state = "player turn"  # player turn, player turn finished, enemy turn, enemy turn finished, ended
         self.last_state = self.state
 
     def update(self, action: int = -1) -> None:
@@ -31,6 +31,7 @@ class Combat:
 
         # Emit event if combat has ended
         if self.player_health <= 0 or self.enemy_health <= 0:
+            self.state = "ended"
             dead = "player" if self.player_health <= 0 else "enemy"
             pygame.event.post(pygame.event.Event(self.events.combat, dead=dead))
 
@@ -78,7 +79,7 @@ class Combat:
             if random.random() > self.enemy_settings.escape_probability:
                 result = random.random()
                 if result <= self.enemy_settings.attack_consistency:
-                    self.enemy.damage(
+                    self.player.damage(
                         self.enemy_settings.base_damage * (1 - self.player_defence)
                     )
                     pygame.event.post(
@@ -123,3 +124,9 @@ class Combat:
 
     def get_state(self) -> str:
         return self.state
+
+    def get_player_health(self) -> int:
+        return self.player_health
+
+    def get_enemy_health(self) -> int:
+        return self.enemy_health
