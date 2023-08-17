@@ -1,5 +1,5 @@
 import pygame, random
-import game_settings
+import resources.game_settings as game_settings
 from resources.player import Player
 from resources.enemies.enemy import Enemy
 from resources.items.item import Inventory
@@ -21,7 +21,7 @@ class Combat:
         )
         self.enemy_health, self.enemy_defence = self.enemy.get_stats()
 
-        self.state = "player turn"  # player turn, player turn finished, enemy turn, enemy turn finished
+        self.state = "player turn"  # player turn, player turn finished, enemy turn, enemy turn finished, ended
         self.last_state = self.state
 
     def update(self, action: int = -1) -> None:
@@ -31,8 +31,9 @@ class Combat:
 
         # Emit event if combat has ended
         if self.player_health <= 0 or self.enemy_health <= 0:
+            self.state = "ended"
             dead = "player" if self.player_health <= 0 else "enemy"
-            pygame.event.post(pygame.event.Event(self.events.COMBAT, dead=dead))
+            pygame.event.post(pygame.event.Event(self.events.combat, dead=dead))
 
         if self.state == "player turn":
             match action:  # 1: attack, 2: item (not yet implemented), 3: escape
@@ -45,13 +46,13 @@ class Combat:
                         )
                         pygame.event.post(
                             pygame.event.Event(
-                                self.events.COMBAT, turn=self.state, attack_success=True
+                                self.events.combat, turn=self.state, attack_success=True
                             )
                         )
                     else:
                         pygame.event.post(
                             pygame.event.Event(
-                                self.events.COMBAT,
+                                self.events.combat,
                                 turn=self.state,
                                 attack_success=False,
                             )
@@ -61,13 +62,13 @@ class Combat:
                     if result <= self.player_settings.escape_chance:
                         pygame.event.post(
                             pygame.event.Event(
-                                self.events.COMBAT, turn=self.state, escape_success=True
+                                self.events.combat, turn=self.state, escape_success=True
                             )
                         )
                     else:
                         pygame.event.post(
                             pygame.event.Event(
-                                self.events.COMBAT,
+                                self.events.combat,
                                 turn=self.state,
                                 escape_success=False,
                             )
@@ -78,19 +79,18 @@ class Combat:
             if random.random() > self.enemy_settings.escape_probability:
                 result = random.random()
                 if result <= self.enemy_settings.attack_consistency:
-                    self.enemy.damage(
-                        self.enemy_settings.base_damage
-                        * (1 - self.player_defence)
+                    self.player.damage(
+                        self.enemy_settings.base_damage * (1 - self.player_defence)
                     )
                     pygame.event.post(
                         pygame.event.Event(
-                            self.events.COMBAT, turn=self.state, attack_success=True
+                            self.events.combat, turn=self.state, attack_success=True
                         )
                     )
                 else:
                     pygame.event.post(
                         pygame.event.Event(
-                            self.events.COMBAT,
+                            self.events.combat,
                             turn=self.state,
                             attack_success=False,
                         )
@@ -101,14 +101,14 @@ class Combat:
                     # Emit an event indicating the enemy's escape fail
                     pygame.event.post(
                         pygame.event.Event(
-                            self.events.COMBAT, turn=self.state, escape_success=True
+                            self.events.combat, turn=self.state, escape_success=True
                         )
                     )
                 else:
                     # Emit an event indicating the enemy's escape fail
                     pygame.event.post(
                         pygame.event.Event(
-                            self.events.COMBAT, turn=self.state, escape_success=False
+                            self.events.combat, turn=self.state, escape_success=False
                         )
                     )
             # Mark the end of the enemy's turn
@@ -124,3 +124,9 @@ class Combat:
 
     def get_state(self) -> str:
         return self.state
+
+    def get_player_health(self) -> int:
+        return self.player_health
+
+    def get_enemy_health(self) -> int:
+        return self.enemy_health
