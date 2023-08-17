@@ -58,7 +58,6 @@ class Events:
         self.button_pressed_event = pygame.USEREVENT + 2
 
 
-
 class Fonts:
     def __init__(self) -> None:
         self.button_font_name = "cochin"

@@ -44,6 +44,13 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (x, y)
 
     def update(self) -> None:
+        if (
+            not self.moving_right
+            and not self.moving_left
+            and not self.moving_up
+            and not self.moving_down
+        ) or self.is_colliding:
+            self.move_stop()
         if self.moving_right:
             self.target_x += self.speed
         elif self.moving_left:
@@ -56,13 +63,6 @@ class Player(pygame.sprite.Sprite):
             self.target_y -= self.speed
         else:
             self._snap_to_grid_y()
-        if (
-            not self.moving_right
-            and not self.moving_left
-            and not self.moving_up
-            and not self.moving_down
-        ):
-            self.move_stop()
         # Update player's position based on the target position.
         error_x = self.target_x - self.rect.x
         error_y = self.target_y - self.rect.y
@@ -113,22 +113,27 @@ class Player(pygame.sprite.Sprite):
 
     def get_stats(self) -> tuple:
         return self.health, self.defence
-    
+
     def get_raw_pos(self) -> tuple:
         return self.rect.center
+
+    def get_is_colliding(self) -> bool:
+        return self.is_colliding
 
     def damage(self, damage) -> None:
         self.health -= damage
 
     def collision(self, is_colliding: bool) -> None:
         self.is_colliding = is_colliding
-        if is_colliding:
-            self.move_stop()
 
     def move_stop(self) -> None:
         # Stop the player from moving.
         self._snap_to_grid_x()
         self._snap_to_grid_y()
+        self.moving_up = False
+        self.moving_down = False
+        self.moving_left = False
+        self.moving_right = False
 
     def _snap_to_grid_x(self) -> None:
         """Adjust player's x position to align with the grid."""

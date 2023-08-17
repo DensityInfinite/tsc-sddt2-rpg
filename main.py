@@ -70,6 +70,7 @@ class Game:
         enemy_group: pygame.sprite.RenderUpdates,
         check_collision: bool = True,
     ):
+        self._check_collision_events(triggers, enemy_group)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -82,7 +83,6 @@ class Game:
                 self.cursor.sprite.register_click(True)  # type: ignore
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.cursor.sprite.register_click(False)  # type: ignore
-            self._check_collision_events(event, triggers, enemy_group)
 
     def update(self, gui_group, enemy_group):
         gui_group.update(self.cursor)
@@ -189,17 +189,17 @@ class Game:
         elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
             self.player.set_moving_right(False)
 
-    def _check_collision_events(self, event, triggers, enemy_group) -> None:
+    def _check_collision_events(self, triggers, enemy_group) -> None:
         for sprite in pygame.sprite.spritecollide(self.player, triggers, False):
             if sprite.get_type() == "damage":
                 self.player.collision(False)
-                if self.last_damage_counter <= 0:
-                    self.player.damage(2)
-                    self.last_damage_counter = self.player_settings.tile_damage_interval
+            elif sprite.get_type() == "neutral":
+                self.player.collision(False)
             elif sprite.get_type() == "obstruction":
                 self.player.collision(True)
-            else:
-                self.player.collision(False)
+            if self.last_damage_counter <= 0:
+                self.player.damage(2)
+            self.last_damage_counter = self.player_settings.tile_damage_interval
 
         for enemy, sprites in pygame.sprite.groupcollide(
             enemy_group, triggers, False, False
