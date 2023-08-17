@@ -45,12 +45,12 @@ In order to achieve a good result with a clean codebase, we will be splitting th
   - [x] Items
   - [ ] NPCs and Dialogue (If have time)
   - [x] Utility (Add on the way)
-- [ ] Assemble
-  - [ ] Save and load system
+- [x] Assemble
+  - [x] Save and load system
   - [x] Actual Maps
     - [x] Enemies and combat triggers
     - [ ] NPCs (If made)
-  - [ ] Menus
+  - [x] Menus
   - [ ] Game Progress (Tutorial, boss etc.)
   - [ ] Construct storyline (If have time)
 
