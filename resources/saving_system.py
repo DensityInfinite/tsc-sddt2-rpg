@@ -38,6 +38,6 @@ class SavingSystem:
             inventory.add_item(item)
 
         player_location = game_state["player_location"]
-        grid = game_state.get("grid", None)
+        grid = game_state["grid"]
 
         return inventory, player_location, grid
